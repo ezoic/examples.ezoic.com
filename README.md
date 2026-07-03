@@ -25,6 +25,7 @@ site/
     sidebar.html        Snippets in a sidebar column and in content
     sync.html           Blocking loader, document.currentScript path
     queued.html         Loader injected late, document-order scan path
+    selector.html       Marked .ezoicad divs with data-* config, one showAds('.ezoicad') call
     anchor.html         Programmatic placement via a CSS selector
     location.html       Named location placement, no anchor
     infinite.html       Infinite scroll: id exhaustion and recycling

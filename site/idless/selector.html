@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Selector — marked ad spots with data attributes | Ezoic Examples</title>
+<meta name="description" content="Mark ad spots with plain divs and data attributes, then place them all with one showAds call using a CSS selector.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Reddit+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+    .ezoicad { outline: 2px dashed var(--green, #27ae60); min-height: 50px; margin: 14px 0; padding: 4px; }
+</style>
+<script data-cfasync="false" src="https://cmp.gatekeeperconsent.com/min.js"></script>
+<script data-cfasync="false" src="https://the.gatekeeperconsent.com/cmp.min.js"></script>
+<script async src="//www.ezojs.com/ezoic/sa.min.js"></script>
+<script>
+    window.ezstandalone = window.ezstandalone || {};
+    ezstandalone.cmd = ezstandalone.cmd || [];
+</script>
+</head>
+<body data-idless-debug>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/">Ezoic <span>Examples</span></a>
+    <nav class="site-nav">
+      <a href="/idless/">Id-less showAds</a>
+      <a href="/placeholders/">Placement IDs</a>
+      <a href="/game-sdk/">Web Game SDK</a>
+      <a href="https://docs.ezoic.com">Docs</a>
+      <a href="https://github.com/ezoic/examples.ezoic.com">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap prose article">
+  <div class="explainer">
+    <h2>What this demonstrates</h2>
+    <div class="explainer-body">Ad spots are marked with plain <code>div</code> elements carrying
+    the <code>ezoicad</code> class and per-ad config in <code>data-*</code> attributes
+    (<code>data-sizes</code>, <code>data-fluid</code>, <code>data-devices</code>, &hellip;), then a
+    single call — <code>showAds(".ezoicad")</code> — places one ad inside each matched element. The
+    publisher styles the container; the ad placeholder is appended inside it. Elements are used only
+    once: the button at the bottom appends a new spot and repeats the same call, and only the new
+    element gets an ad — the SPA / infinite-scroll pattern.</div>
+  </div>
+
+  <div class="snippet-label">Integration used on this page</div>
+  <pre class="snippet"><code>&lt;!-- Head: consent + Ezoic standalone loader --&gt;
+&lt;script data-cfasync="false" src="https://cmp.gatekeeperconsent.com/min.js"&gt;&lt;/script&gt;
+&lt;script data-cfasync="false" src="https://the.gatekeeperconsent.com/cmp.min.js"&gt;&lt;/script&gt;
+&lt;script async src="//www.ezojs.com/ezoic/sa.min.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+  window.ezstandalone = window.ezstandalone || {};
+  ezstandalone.cmd = ezstandalone.cmd || [];
+&lt;/script&gt;
+
+&lt;!-- Body: mark ad spots wherever you want them --&gt;
+&lt;div class="ezoicad" data-sizes="300x250,336x280" data-mobile_sizes="300x250"&gt;&lt;/div&gt;
+&lt;div class="ezoicad" data-sizes="300x250" data-fluid="false"&gt;&lt;/div&gt;
+&lt;div class="ezoicad" data-devices="desktop" data-sizes="728x90"&gt;&lt;/div&gt;
+
+&lt;!-- One call places them all --&gt;
+&lt;script&gt;
+  ezstandalone.cmd.push(function () {
+    ezstandalone.showAds(".ezoicad");
+  });
+&lt;/script&gt;</code></pre>
+
+  <p class="source-row"><a class="source-link" href="https://github.com/ezoic/examples.ezoic.com/blob/master/site/idless/selector.html">View source on GitHub &rarr;</a></p>
+  <p class="source-row">Docs: <a class="source-link" href="https://docs.ezoic.com/docs/ezoicads/implementation/#marking-ad-spots-in-your-html">Ad Placements — Marking Ad Spots In Your HTML</a></p>
+
+  <article>
+    <h1>Selector-based ad spots</h1>
+    <p>This page marks its ad spots with plain divs carrying the <code>ezoicad</code> class and
+    per-ad config in data attributes, then makes a single <code>showAds(".ezoicad")</code> call.
+    No placeholder ids and no per-spot scripts.</p>
+
+    <div class="ezoicad" data-sizes="300x250,336x280" data-mobile_sizes="300x250"></div>
+
+    <p>The spot above passes a desktop size list plus a mobile override via
+    <code>data-mobile_sizes</code>. The next spot opts out of fluid (native-style) creatives with
+    <code>data-fluid="false"</code>, so its GPT slot size list must not contain
+    <code>fluid</code>.</p>
+
+    <div class="ezoicad" data-sizes="300x250" data-fluid="false"></div>
+
+    <p>Some more paragraph content between the spots so the page reads like a real article and the
+    location classifier has words to work with. The dashed green outlines mark the publisher-owned
+    container divs; the outlined red placeholder is appended inside them.</p>
+
+    <div class="ezoicad" data-devices="desktop" data-sizes="728x90"></div>
+
+    <p>The spot directly above is desktop-only via <code>data-devices="desktop"</code> — on a phone
+    it stays empty and no request is made for it. Below, a button appends a brand new
+    <code>ezoicad</code> div and repeats the same call. The already-consumed spots above must be
+    skipped (no double ads); only the new element gets an ad.</p>
+
+    <p><button class="btn btn-secondary" id="add-spot" type="button">Add a new ad spot + repeat the call</button></p>
+    <div id="late-spots"></div>
+  </article>
+</main>
+
+<script>
+    // Driver: method name split so the inline-script scanner never mistakes
+    // this for a position-marking snippet (all descriptors carry explicit
+    // anchors here, but the repo rule is: drivers never contain the literal
+    // token).
+    ezstandalone.cmd.push(function () {
+        window.ezstandalone["show" + "Ads"](".ezoicad");
+    });
+
+    document.getElementById("add-spot").addEventListener("click", function () {
+        var wrap = document.getElementById("late-spots");
+        var p = document.createElement("p");
+        p.textContent = "A freshly appended paragraph so the new spot sits inside real content. " +
+            "The repeated call only picks up the one new element below.";
+        wrap.appendChild(p);
+        var div = document.createElement("div");
+        div.className = "ezoicad";
+        div.setAttribute("data-sizes", "300x250");
+        wrap.appendChild(div);
+        ezstandalone.cmd.push(function () {
+            window.ezstandalone["show" + "Ads"](".ezoicad");
+        });
+    });
+</script>
+<script src="/assets/site.js"></script>
+</body>
+</html>
