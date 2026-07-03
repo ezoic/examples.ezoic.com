@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SPA navigation — useEzoicPageView | Ezoic Examples — React SDK</title>
+<meta name="description" content="@ezoic/react-sdk single-page-app routing: useEzoicPageView coalesces with the built-in SPAMonitor and refreshes ads on route change.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Reddit+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+.react-demo-frame { display: block; width: 100%; height: 900px; border: 1px solid var(--hairline); border-radius: var(--radius); background: #fff; }
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/">Ezoic <span>Examples</span></a>
+    <nav class="site-nav">
+      <a href="/idless/">Id-less showAds</a>
+      <a href="/placeholders/">Placement IDs</a>
+      <a href="/game-sdk/">Web Game SDK</a>
+      <a href="/angular-sdk/">Angular SDK</a>
+      <a href="/vue-sdk/">Vue SDK</a>
+      <a href="/react-sdk/">React SDK</a>
+      <a href="https://docs.ezoic.com">Docs</a>
+      <a href="https://github.com/ezoic/examples.ezoic.com">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap prose article">
+  <section class="hero">
+    <p class="eyebrow">React SDK</p>
+    <h1>SPA navigation with <span class="accent">useEzoicPageView</span></h1>
+    <p>Single-page apps (React Router, Next.js app router, or any client-side router) need to tell
+    Ezoic when the "page" changes without a full reload, so ads refresh for the new route.</p>
+  </section>
+
+  <div class="explainer">
+    <h2>What this demonstrates</h2>
+    <div class="explainer-body"><code>useEzoicPageView(pageKey)</code> is router-agnostic: call it with
+    whatever string identifies the current route (pathname, route name, etc). At boot the provider
+    pushes <code>setIsSinglePageApplication(true)</code>; on every <code>pageKey</code> change the hook
+    destroys the departing placements and calls <code>showAds(newIds)</code> for the new route's ids.
+    The bundled <code>sa.min.js</code> also patches <code>pushState</code> and runs its own SPAMonitor
+    with a 1000&nbsp;ms debounce — the hook coalesces with it rather than double-firing a refresh.</div>
+  </div>
+
+  <p class="source-row"><a class="source-link" href="https://github.com/ezoic/examples.ezoic.com/blob/master/site/react-sdk/spa.html">View source on GitHub &rarr;</a></p>
+  <p class="source-row">SDK docs: <a class="source-link" href="https://github.com/ezoic/ezoic-react-sdk#spa-routing">README — SPA routing</a></p>
+
+  <div class="snippet-label">Hook usage</div>
+  <pre class="snippet"><code>import { useEzoicPageView, EzoicAd } from '@ezoic/react-sdk';
+
+function Page({ route }) {
+  useEzoicPageView(route, { ids: [201, 202] });
+  return (
+    &lt;&gt;
+      &lt;EzoicAd id={201} sizes={['728x90']} required /&gt;
+      &lt;EzoicAd id={202} sizes={['300x250']} required /&gt;
+    &lt;/&gt;
+  );
+}</code></pre>
+
+  <div class="explainer">
+    <h2>Live demo</h2>
+    <div class="explainer-body">The panel below embeds the SDK's own demo app (built from
+    <code>@ezoic/react-sdk</code> v1.0.0) — use its <strong>"SPA navigation"</strong> panel to simulate
+    route changes and watch the event log for destroy/showAds pairs.
+    <a href="/react-sdk/demo.html">Open the full demo in a new tab &rarr;</a></div>
+  </div>
+  <div class="frame-holder">
+    <iframe class="react-demo-frame" src="/react-sdk/demo.html" title="@ezoic/react-sdk live demo" loading="lazy"></iframe>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>Ezoic Examples</span>
+    <nav>
+      <a href="https://docs.ezoic.com">docs.ezoic.com</a>
+      <a href="https://www.ezoic.com">www.ezoic.com</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="/assets/site.js"></script>
+</body>
+</html>

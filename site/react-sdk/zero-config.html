@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zero-config placement — location | Ezoic Examples — React SDK</title>
+<meta name="description" content="@ezoic/react-sdk zero-config display placement: <EzoicAd location> with no dashboard id, resolved at runtime via GetGeneratedIdAsync.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Reddit+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+.react-demo-frame { display: block; width: 100%; height: 900px; border: 1px solid var(--hairline); border-radius: var(--radius); background: #fff; }
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/">Ezoic <span>Examples</span></a>
+    <nav class="site-nav">
+      <a href="/idless/">Id-less showAds</a>
+      <a href="/placeholders/">Placement IDs</a>
+      <a href="/game-sdk/">Web Game SDK</a>
+      <a href="/angular-sdk/">Angular SDK</a>
+      <a href="/vue-sdk/">Vue SDK</a>
+      <a href="/react-sdk/">React SDK</a>
+      <a href="https://docs.ezoic.com">Docs</a>
+      <a href="https://github.com/ezoic/examples.ezoic.com">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap prose article">
+  <section class="hero">
+    <p class="eyebrow">React SDK</p>
+    <h1>Zero-config placement with <span class="accent">location</span></h1>
+    <p><code>&lt;EzoicAd location="under_first_paragraph" /&gt;</code> takes no dashboard id at all — no
+    "id" prop is passed. The component resolves a reserved 900-range placeholder id at runtime and
+    inserts it itself.</p>
+  </section>
+
+  <div class="explainer">
+    <h2>What this demonstrates</h2>
+    <div class="explainer-body">A <code>location</code> placement resolves through
+    <code>ezstandalone.GetGeneratedIdAsync</code> once the standalone bundle initializes; if the bundle
+    never loads, it falls back to a static id&rarr;location map so the placeholder still renders. Because
+    a <code>location</code> id has no dashboard-configured sizing, the component defaults
+    <code>required: true</code> and requires an explicit <code>sizes</code> prop — omitting it logs a
+    dev-mode console warning.</div>
+  </div>
+
+  <p class="source-row"><a class="source-link" href="https://github.com/ezoic/examples.ezoic.com/blob/master/site/react-sdk/zero-config.html">View source on GitHub &rarr;</a></p>
+  <p class="source-row">SDK docs: <a class="source-link" href="https://github.com/ezoic/ezoic-react-sdk#zero-config-placements">README — Zero-config placements</a></p>
+
+  <div class="snippet-label">Component usage</div>
+  <pre class="snippet"><code>import { EzoicAd } from '@ezoic/react-sdk';
+
+function Article() {
+  return (
+    &lt;&gt;
+      &lt;EzoicAd location="top_of_page" sizes={['728x90', '320x50']} /&gt;
+      &lt;EzoicAd location="under_first_paragraph" sizes={['728x90', '300x250']} /&gt;
+    &lt;/&gt;
+  );
+}</code></pre>
+
+  <div class="explainer">
+    <h2>Live demo</h2>
+    <div class="explainer-body">The panel below embeds the SDK's own demo app (built from
+    <code>@ezoic/react-sdk</code> v1.0.0) — look at its <strong>"Zero-config placements — location"</strong>
+    panel for this scenario. <code>examples.ezoic.com</code>'s root domain is not lite-active, so the
+    ad request will not fill here — check the placeholder div and resolved id, not the fill.
+    <a href="/react-sdk/demo.html">Open the full demo in a new tab &rarr;</a></div>
+  </div>
+  <div class="frame-holder">
+    <iframe class="react-demo-frame" src="/react-sdk/demo.html" title="@ezoic/react-sdk live demo" loading="lazy"></iframe>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>Ezoic Examples</span>
+    <nav>
+      <a href="https://docs.ezoic.com">docs.ezoic.com</a>
+      <a href="https://www.ezoic.com">www.ezoic.com</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="/assets/site.js"></script>
+</body>
+</html>
