@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sync — currentScript anchor path | Ezoic Examples</title>
+<meta name="description" content="Blocking sa.min.js load so each snippet runs immediately and anchors on document.currentScript.">
+<link rel="stylesheet" href="/assets/site.css">
+<script data-cfasync="false" src="https://cmp.gatekeeperconsent.com/min.js"></script>
+<script data-cfasync="false" src="https://the.gatekeeperconsent.com/cmp.min.js"></script>
+<!-- Blocking load: sa.min.js is fully initialized before any body snippet runs,
+     so each snippet's cmd.push executes IMMEDIATELY and document.currentScript
+     points at the snippet — the exact-anchor fast path, no scan involved. -->
+<script src="https://www.ezojs.com/ezoic/sa.min.js"></script>
+<script>
+    window.ezstandalone = window.ezstandalone || {};
+    ezstandalone.cmd = ezstandalone.cmd || [];
+</script>
+</head>
+<body data-idless-debug>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/">Ezoic<span>Examples</span></a>
+    <nav class="site-nav">
+      <a href="/idless/">Id-less showAds</a>
+      <a href="/game-sdk/">Web Game SDK</a>
+      <a href="https://docs.ezoic.com">Docs</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap prose article">
+  <div class="explainer">
+    <h2>What this demonstrates</h2>
+    <div class="explainer-body">Here <code>sa.min.js</code> is loaded <strong>without</strong>
+    <code>async</code>, so it initializes before the body parses. Each snippet executes its queued
+    function immediately, and the resolver anchors on <code>document.currentScript</code> — the
+    most precise anchor there is.</div>
+  </div>
+
+  <div class="snippet-label">Integration used on this page</div>
+  <pre class="snippet"><code>&lt;!-- Head: consent + BLOCKING loader (no async) --&gt;
+&lt;script data-cfasync="false" src="https://cmp.gatekeeperconsent.com/min.js"&gt;&lt;/script&gt;
+&lt;script data-cfasync="false" src="https://the.gatekeeperconsent.com/cmp.min.js"&gt;&lt;/script&gt;
+&lt;script src="https://www.ezojs.com/ezoic/sa.min.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+  window.ezstandalone = window.ezstandalone || {};
+  ezstandalone.cmd = ezstandalone.cmd || [];
+&lt;/script&gt;
+
+&lt;!-- Body: runs immediately, anchors on document.currentScript --&gt;
+&lt;script&gt;
+  ezstandalone.cmd.push(function () {
+    ezstandalone.showAds({sizes: "300x250"});
+  });
+&lt;/script&gt;</code></pre>
+
+  <article>
+    <h1>Synchronous loader — currentScript path</h1>
+    <p>sa.min.js is loaded without async on this page, so it initializes before the body parses.
+    Each snippet below executes its queued function immediately, and the resolver anchors on
+    document.currentScript — the most precise anchor there is.</p>
+
+    <script>
+        ezstandalone.cmd.push(function () {
+            ezstandalone.showAds({sizes: "300x250"});
+        });
+    </script>
+
+    <p>Second paragraph, after the first ad spot. A second snippet follows this paragraph to prove
+    successive sync calls each anchor on their own script.</p>
+
+    <script>
+        ezstandalone.cmd.push(function () {
+            ezstandalone.showAds({sizes: "300x250"});
+        });
+    </script>
+
+    <p>Third paragraph closing out the article after the second ad spot.</p>
+  </article>
+</main>
+
+<script src="/assets/site.js"></script>
+</body>
+</html>

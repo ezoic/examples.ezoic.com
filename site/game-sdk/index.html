@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Web Game SDK — cross-origin HTML5 game demo | Ezoic Examples</title>
+<meta name="description" content="A cross-origin HTML5 game monetized through the parent page's Ezoic integration via the EzGameSDK postMessage bridge.">
+<link rel="stylesheet" href="/assets/site.css">
+<script data-cfasync="false" src="https://cmp.gatekeeperconsent.com/min.js"></script>
+<script data-cfasync="false" src="https://the.gatekeeperconsent.com/cmp.min.js"></script>
+<script async src="//www.ezojs.com/ezoic/sa.min.js"></script>
+<script>
+    window.ezstandalone = window.ezstandalone || {};
+    ezstandalone.cmd = ezstandalone.cmd || [];
+    // Standard integration call. Even with no content placeholders it runs the
+    // page-level ad pipeline, which injects the rewarded-ads script the game
+    // bridge delegates ad breaks to.
+    ezstandalone.cmd.push(function () {
+        ezstandalone.showAds();
+    });
+</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/">Ezoic<span>Examples</span></a>
+    <nav class="site-nav">
+      <a href="/idless/">Id-less showAds</a>
+      <a href="/game-sdk/">Web Game SDK</a>
+      <a href="https://docs.ezoic.com">Docs</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <p class="eyebrow">Web Game SDK</p>
+    <h1>Cross-origin game, monetized by the parent page</h1>
+    <p>An HTML5 game runs inside a cross-origin iframe and calls
+    <code>window.EzGameSDK</code>. The SDK talks to the parent page over a
+    <code>postMessage</code> bridge inside <code>sa.min.js</code>; the parent — the
+    ads.txt-approved domain — runs the auction and renders ad breaks, rewarded ads, and banners.
+    The game never runs an auction itself.</p>
+  </section>
+
+  <section class="panel">
+    <h2>How it fits together</h2>
+    <div class="explainer-body">The game is embedded from a different origin
+    (<code>www.ezojs.com</code>). The parent bridge only accepts frames marked with the
+    <code>data-ez-game</code> attribute, so unmarked iframes are ignored. On load the parent runs
+    <code>ezstandalone.showAds()</code>, which injects the rewarded-ads pipeline the bridge
+    delegates to. Inside the frame, the game calls <code>init</code> then requests breaks, rewarded
+    ads, and banners — every call is proxied to the parent and answered over the bridge.</div>
+    <div class="kv">The game's own on-screen log shows the SDK side (responses and events arriving
+    inside the iframe). The panel below shows the parent side.</div>
+  </section>
+
+  <section class="panel">
+    <h2>Game (cross-origin iframe)</h2>
+    <div class="frame-holder">
+      <iframe id="game-frame"
+              src="https://www.ezojs.com/ezoic/game-sdk-demo-game.html?v=4"
+              title="Ezoic Game SDK demo game"
+              data-ez-game
+              allow="autoplay; fullscreen"></iframe>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>Parent bridge log (messages received from the game iframe)</h2>
+    <div id="ez-bridge-log" class="bridge-log">waiting for messages...</div>
+  </section>
+
+  <section class="panel">
+    <h2>Minimal game-side usage</h2>
+    <div class="snippet-label">Runs inside the game frame (served from your game's origin)</div>
+    <pre class="snippet"><code>&lt;!-- Load the game SDK from your game's origin --&gt;
+&lt;script src="https://www.ezojs.com/ezoic/gamesdk.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+  window.EzGameSDK = window.EzGameSDK || {};
+  window.EzGameSDK.cmd = window.EzGameSDK.cmd || [];
+
+  window.EzGameSDK.cmd.push(function () {
+    // Detects environment and handshakes with the parent bridge.
+    EzGameSDK.init({ breakCooldownSec: 30 }).then(function () {
+      // Interstitial before gameplay starts. Pause and mute in onStart.
+      EzGameSDK.commercialBreak({ position: "preroll", onStart: pauseGame });
+    });
+  });
+
+  // Rewarded ad: grant the reward only when rewarded === true.
+  function offerReward() {
+    EzGameSDK.rewardedBreak({ rewardName: "extra_life", onStart: pauseGame })
+      .then(function (r) { if (r.rewarded) { grantExtraLife(); } });
+  }
+
+  // Anchored banner sized to a box the game reserves.
+  EzGameSDK.showBanner({ width: 320, height: 50, anchor: "bottom" });
+&lt;/script&gt;</code></pre>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>Ezoic Examples</span>
+    <nav>
+      <a href="https://docs.ezoic.com">docs.ezoic.com</a>
+      <a href="https://www.ezoic.com">www.ezoic.com</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+(function () {
+    'use strict';
+
+    var logEl = document.getElementById('ez-bridge-log');
+    var cleared = false;
+
+    function log(cls, text) {
+        if (!cleared) { logEl.textContent = ''; cleared = true; }
+        var line = document.createElement('div');
+        line.className = cls;
+        line.textContent = '[' + new Date().toISOString().slice(11, 23) + '] ' + text;
+        logEl.appendChild(line);
+        logEl.scrollTop = logEl.scrollHeight;
+    }
+
+    // Observe every game-sdk protocol message the iframe sends to this page.
+    // (Parent->iframe responses are delivered directly to the iframe window and
+    // are visible in the game's own on-screen log.)
+    window.addEventListener('message', function (event) {
+        var d = event.data;
+        if (!d || typeof d !== 'object' || d.ezGameSdk === undefined) {
+            return;
+        }
+        log('dir-in', 'game->parent ' + (d.kind || '?') + ' method=' + (d.method || '-') +
+            ' id=' + (d.id !== undefined ? d.id : '-') +
+            (d.payload ? ' payload=' + JSON.stringify(d.payload) : ''));
+    });
+
+    ezstandalone.cmd.push(function () {
+        log('dir-note', 'ezstandalone initialized - game bridge listener active');
+    });
+
+    log('dir-note', 'parent page loaded, waiting for sa.min.js + game handshake');
+})();
+</script>
+<script src="/assets/site.js"></script>
+</body>
+</html>

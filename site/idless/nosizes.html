@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>No sizes — showAds({}) mid-article | Ezoic Examples</title>
+<meta name="description" content="Id-less showAds with an empty descriptor: Ezoic picks the size for the placeholder.">
+<link rel="stylesheet" href="/assets/site.css">
+<script data-cfasync="false" src="https://cmp.gatekeeperconsent.com/min.js"></script>
+<script data-cfasync="false" src="https://the.gatekeeperconsent.com/cmp.min.js"></script>
+<script async src="//www.ezojs.com/ezoic/sa.min.js"></script>
+<script>
+    window.ezstandalone = window.ezstandalone || {};
+    ezstandalone.cmd = ezstandalone.cmd || [];
+</script>
+</head>
+<body data-idless-debug>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/">Ezoic<span>Examples</span></a>
+    <nav class="site-nav">
+      <a href="/idless/">Id-less showAds</a>
+      <a href="/game-sdk/">Web Game SDK</a>
+      <a href="https://docs.ezoic.com">Docs</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap prose article">
+  <div class="explainer">
+    <h2>What this demonstrates</h2>
+    <div class="explainer-body">The snippet passes an empty object to <code>showAds</code> — no
+    sizes, no location, no id, the sparsest possible call. The spot is still the script's position;
+    Ezoic decides which size pays best for the placeholder.</div>
+  </div>
+
+  <div class="snippet-label">Integration used on this page</div>
+  <pre class="snippet"><code>&lt;!-- Head: consent + Ezoic standalone loader --&gt;
+&lt;script data-cfasync="false" src="https://cmp.gatekeeperconsent.com/min.js"&gt;&lt;/script&gt;
+&lt;script data-cfasync="false" src="https://the.gatekeeperconsent.com/cmp.min.js"&gt;&lt;/script&gt;
+&lt;script async src="//www.ezojs.com/ezoic/sa.min.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+  window.ezstandalone = window.ezstandalone || {};
+  ezstandalone.cmd = ezstandalone.cmd || [];
+&lt;/script&gt;
+
+&lt;!-- Body: empty descriptor, Ezoic picks the size --&gt;
+&lt;script&gt;
+  ezstandalone.cmd.push(function () {
+    ezstandalone.showAds({});
+  });
+&lt;/script&gt;</code></pre>
+
+  <article>
+    <h1>Empty descriptor — Ezoic picks the size</h1>
+    <p>The snippet on this page passes an empty object to showAds. No sizes, no location, no id —
+    the sparsest possible call. The spot is still the script's position.</p>
+    <p>Second paragraph of ordinary content so the mid-article snippet below has real paragraphs
+    on both sides of it.</p>
+    <p>Third paragraph directly above the ad spot. With three paragraphs preceding the script out
+    of five total, the label lands in the mid-content bucket.</p>
+
+    <script>
+        ezstandalone.cmd.push(function () {
+            ezstandalone.showAds({});
+        });
+    </script>
+
+    <p>Fourth paragraph, right after the ad spot. Ezoic decides which size pays best for this
+    placeholder since the call did not constrain dimensions.</p>
+    <p>A closing paragraph keeps the article shaped like real content.</p>
+  </article>
+</main>
+
+<script src="/assets/site.js"></script>
+</body>
+</html>

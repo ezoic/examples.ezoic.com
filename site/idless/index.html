@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Id-less showAds examples — Ezoic Examples</title>
+<meta name="description" content="Standalone publisher pages exercising Ezoic's id-less showAds. The ad goes where the script is.">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/">Ezoic<span>Examples</span></a>
+    <nav class="site-nav">
+      <a href="/idless/">Id-less showAds</a>
+      <a href="/game-sdk/">Web Game SDK</a>
+      <a href="https://docs.ezoic.com">Docs</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <p class="eyebrow">Id-less showAds</p>
+    <h1>Standalone showAds examples</h1>
+    <p>Each page is a small standalone publisher page exercising one scenario. The ad goes
+    where the script is. Inserted placeholders are outlined and a debug bar at the bottom
+    lists id / location / position / filled.</p>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title">Examples</h2>
+    <ul class="example-list">
+      <li><a class="row" href="/idless/basic"><span class="name">basic</span><span class="desc">one snippet after the second paragraph (the canonical simple setup)</span></a></li>
+      <li><a class="row" href="/idless/top"><span class="name">top</span><span class="desc">snippet above the title &rarr; <code>top_of_page</code> (900)</span></a></li>
+      <li><a class="row" href="/idless/nosizes"><span class="name">nosizes</span><span class="desc"><code>showAds({})</code> mid-article, Ezoic picks the size</span></a></li>
+      <li><a class="row" href="/idless/multi"><span class="name">multi</span><span class="desc">four snippets spread through a long article, document order</span></a></li>
+      <li><a class="row" href="/idless/sidebar"><span class="name">sidebar</span><span class="desc">snippets in the sidebar column and in content (desktop layout)</span></a></li>
+      <li><a class="row" href="/idless/sync"><span class="name">sync</span><span class="desc">sa.min.js loads blocking, snippets run after it &rarr; <code>document.currentScript</code> path</span></a></li>
+      <li><a class="row" href="/idless/queued"><span class="name">queued</span><span class="desc">sa.min.js injected 800ms after load, snippets queue first &rarr; document-order scan path</span></a></li>
+      <li><a class="row" href="/idless/anchor"><span class="name">anchor</span><span class="desc">JS call with <code>anchor: '#target'</code>, no inline snippet</span></a></li>
+      <li><a class="row" href="/idless/location"><span class="name">location</span><span class="desc">JS call with <code>location: 'under_first_paragraph'</code>, no anchor</span></a></li>
+      <li><a class="row" href="/idless/infinite"><span class="name">infinite</span><span class="desc">infinite scroll; exhausts every id then recycles the oldest (<code>?burst=120</code> to auto-run)</span></a></li>
+    </ul>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>Ezoic Examples</span>
+    <nav>
+      <a href="https://docs.ezoic.com">docs.ezoic.com</a>
+      <a href="https://www.ezoic.com">www.ezoic.com</a>
+    </nav>
+  </div>
+</footer>
+</body>
+</html>

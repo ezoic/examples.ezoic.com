@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Basic — snippet after the second paragraph | Ezoic Examples</title>
+<meta name="description" content="The canonical id-less showAds setup: one plain snippet pasted between two paragraphs.">
+<link rel="stylesheet" href="/assets/site.css">
+<script data-cfasync="false" src="https://cmp.gatekeeperconsent.com/min.js"></script>
+<script data-cfasync="false" src="https://the.gatekeeperconsent.com/cmp.min.js"></script>
+<script async src="//www.ezojs.com/ezoic/sa.min.js"></script>
+<script>
+    window.ezstandalone = window.ezstandalone || {};
+    ezstandalone.cmd = ezstandalone.cmd || [];
+</script>
+</head>
+<body data-idless-debug>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/">Ezoic<span>Examples</span></a>
+    <nav class="site-nav">
+      <a href="/idless/">Id-less showAds</a>
+      <a href="/game-sdk/">Web Game SDK</a>
+      <a href="https://docs.ezoic.com">Docs</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap prose article">
+  <div class="explainer">
+    <h2>What this demonstrates</h2>
+    <div class="explainer-body">The canonical simple setup: an ordinary article with one plain
+    <code>showAds</code> snippet pasted between two paragraphs. No placeholder divs, nothing
+    configured in a dashboard. The ad renders exactly where the script sits — between the second
+    and third paragraphs — labeled <code>under_second_paragraph</code> and resolved to a generated
+    900-series id.</div>
+  </div>
+
+  <div class="snippet-label">Integration used on this page</div>
+  <pre class="snippet"><code>&lt;!-- Head: consent + Ezoic standalone loader --&gt;
+&lt;script data-cfasync="false" src="https://cmp.gatekeeperconsent.com/min.js"&gt;&lt;/script&gt;
+&lt;script data-cfasync="false" src="https://the.gatekeeperconsent.com/cmp.min.js"&gt;&lt;/script&gt;
+&lt;script async src="//www.ezojs.com/ezoic/sa.min.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+  window.ezstandalone = window.ezstandalone || {};
+  ezstandalone.cmd = ezstandalone.cmd || [];
+&lt;/script&gt;
+
+&lt;!-- Body: paste where you want the ad --&gt;
+&lt;script&gt;
+  ezstandalone.cmd.push(function () {
+    ezstandalone.showAds({sizes: "300x250"});
+  });
+&lt;/script&gt;</code></pre>
+
+  <article>
+    <h1>The canonical simple setup</h1>
+    <p>This page is exactly what the simple setup looks like: an ordinary article with one plain
+    snippet pasted between two paragraphs. There are no placeholder divs anywhere and nothing is
+    configured in a dashboard for this spot.</p>
+    <p>The paragraph above is the first real content block and this one is the second. The snippet
+    sits right below this paragraph, so the ad should appear exactly here — between the second and
+    third paragraphs — labeled <code>under_second_paragraph</code> and resolved to a generated
+    900-series id.</p>
+
+    <script>
+        ezstandalone.cmd.push(function () {
+            ezstandalone.showAds({sizes: "300x250"});
+        });
+    </script>
+
+    <p>This third paragraph continues after the ad spot. If the placement worked, the outlined div
+    sits directly above this text with the snippet script as its previous sibling.</p>
+    <p>A final paragraph keeps the article long enough that paragraph counting has something to
+    work with and the page looks like real content rather than a fixture.</p>
+  </article>
+</main>
+
+<script src="/assets/site.js"></script>
+</body>
+</html>

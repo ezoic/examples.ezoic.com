@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Infinite — exhaustion and recycling | Ezoic Examples</title>
+<meta name="description" content="Infinite scroll id-less showAds: exhausts every mapped id, then destroys the oldest placeholder and recycles its id.">
+<link rel="stylesheet" href="/assets/site.css">
+<script data-cfasync="false" src="https://cmp.gatekeeperconsent.com/min.js"></script>
+<script data-cfasync="false" src="https://the.gatekeeperconsent.com/cmp.min.js"></script>
+<script async src="//www.ezojs.com/ezoic/sa.min.js"></script>
+<script>
+    window.ezstandalone = window.ezstandalone || {};
+    ezstandalone.cmd = ezstandalone.cmd || [];
+</script>
+</head>
+<body class="has-debug-bar">
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/">Ezoic<span>Examples</span></a>
+    <nav class="site-nav">
+      <a href="/idless/">Id-less showAds</a>
+      <a href="/game-sdk/">Web Game SDK</a>
+      <a href="https://docs.ezoic.com">Docs</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap prose article">
+  <div class="explainer">
+    <h2>What this demonstrates</h2>
+    <div class="explainer-body">Scrolling near the bottom appends a batch of four paragraphs
+    followed by one id-less <code>showAds</code> call. Batches keep claiming generated ids until
+    every mapped id on the page is in use; from then on the resolver destroys the oldest id-less
+    placeholder and reuses its id rather than ever failing a call. Add <code>?burst=120</code> to
+    the URL to run 120 batches automatically. <code>window.__idlessInfinite</code> exposes the
+    counters for automation.</div>
+  </div>
+
+  <div class="snippet-label">Integration used on this page</div>
+  <pre class="snippet"><code>&lt;!-- Head: consent + Ezoic standalone loader --&gt;
+&lt;script data-cfasync="false" src="https://cmp.gatekeeperconsent.com/min.js"&gt;&lt;/script&gt;
+&lt;script data-cfasync="false" src="https://the.gatekeeperconsent.com/cmp.min.js"&gt;&lt;/script&gt;
+&lt;script async src="//www.ezojs.com/ezoic/sa.min.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+  window.ezstandalone = window.ezstandalone || {};
+  ezstandalone.cmd = ezstandalone.cmd || [];
+&lt;/script&gt;
+
+&lt;!-- Per appended batch: one id-less call, method name split --&gt;
+&lt;script&gt;
+  window.ezstandalone.cmd.push(function () {
+    window.ezstandalone["show" + "Ads"]({sizes: "300x250"});
+  });
+&lt;/script&gt;</code></pre>
+
+  <article id="article">
+    <h1>Infinite scroll — id exhaustion and recycling</h1>
+    <p>Scrolling near the bottom appends a batch of four paragraphs followed by one id-less
+    showAds call. Batches keep claiming generated ids until every mapped id on the page is in
+    use; from then on the resolver must destroy the oldest id-less placeholder and reuse its id
+    rather than ever failing a call.</p>
+    <p>Add <strong>?burst=120</strong> to the URL to run 120 batches automatically without
+    scrolling. Progress and every destroy/reuse event appear in the status bar below;
+    <code>window.__idlessInfinite</code> exposes the counters for automation.</p>
+  </article>
+</main>
+<div id="status" class="idless-debug"></div>
+<script>
+(function () {
+    var params = {};
+    window.location.search.replace(/[?&]([^=&]+)=([^&]*)/g, function (m, k, v) {
+        params[k] = decodeURIComponent(v);
+    });
+
+    function status(msg) {
+        var line = document.createElement("div");
+        line.appendChild(document.createTextNode(msg));
+        var box = document.getElementById("status");
+        box.appendChild(line);
+        box.scrollTop = box.scrollHeight;
+    }
+
+    // Method name split so the document-order scanner never matches this
+    // driver script; batches run from timeouts so there is no script anchor
+    // and each ad appends at the end of the content — tracking the newest batch.
+    function callShowAds(desc) {
+        window.ezstandalone["show" + "Ads"](desc);
+        return desc;
+    }
+
+    var FILLER = [
+        "Infinite scroll filler paragraph. Fresh content keeps arriving as the reader approaches the bottom of the page, exactly like a feed or endless article list would behave in production.",
+        "Each appended batch is followed by one id-less call carrying only sizes; with no script anchor the resolver appends at the end of the content, which tracks the newest batch.",
+        "As batches accumulate the generated ids drain one by one until every mapped id on the page is in use and the resolver has to start recycling.",
+        "Once nothing is free the resolver destroys the oldest id-less placeholder on the page, releases its id, and reuses it for the newest placement instead of failing the call."
+    ];
+    var article = document.getElementById("article");
+    var summary = document.createElement("div");
+    document.getElementById("status").appendChild(summary);
+    var state = {batches: 0, seen: {}, destroyed: {}, recycled: [], prevLive: {}, pending: false, done: false};
+    window.__idlessInfinite = state;
+
+    function liveIds() {
+        // id -> insertion seq. A destroy+reuse within one batch keeps the id
+        // live but changes its seq, so track seq, not presence.
+        var out = {};
+        var els = document.querySelectorAll("[data-inserter=\"sa-idless\"]");
+        for (var i = 0; i < els.length; i++) {
+            out[els[i].id.replace("ezoic-pub-ad-placeholder-", "")] =
+                parseInt(els[i].getAttribute("data-ez-idless-seq"), 10);
+        }
+        return out;
+    }
+
+    function snapshot() {
+        var live = liveIds();
+        var id;
+        for (id in state.prevLive) {
+            if (!(id in live)) {
+                state.destroyed[id] = state.batches;
+                status("batch " + state.batches + ": placeholder " + id + " destroyed (recycle victim)");
+            } else if (live[id] !== state.prevLive[id]) {
+                state.destroyed[id] = state.batches;
+                state.recycled.push(id + "@batch" + state.batches);
+                status("batch " + state.batches + ": placeholder " + id + " destroyed and REUSED (seq " +
+                    state.prevLive[id] + " -> " + live[id] + ")");
+            }
+        }
+        for (id in live) {
+            if (!(id in state.prevLive) && state.destroyed[id] !== undefined) {
+                state.recycled.push(id + "@batch" + state.batches);
+                status("batch " + state.batches + ": placeholder " + id + " REUSED after destroy");
+            }
+            if (state.seen[id] === undefined) {
+                state.seen[id] = state.batches;
+            }
+        }
+        state.prevLive = live;
+        summary.textContent = "infinite: batches=" + state.batches +
+            " live=" + Object.keys(live).length +
+            " distinctIdsSeen=" + Object.keys(state.seen).length +
+            " destroyed=" + Object.keys(state.destroyed).length +
+            " recycledEvents=" + state.recycled.length;
+    }
+
+    function addBatch(done) {
+        state.batches++;
+        for (var i = 0; i < 4; i++) {
+            var p = document.createElement("p");
+            p.appendChild(document.createTextNode("[batch " + state.batches + "." + (i + 1) + "] " + FILLER[i % FILLER.length]));
+            article.appendChild(p);
+        }
+        window.ezstandalone.cmd.push(function () {
+            callShowAds({sizes: "300x250"});
+        });
+        setTimeout(function () {
+            snapshot();
+            state.pending = false;
+            if (done) {
+                done();
+            }
+        }, 900);
+    }
+
+    var burst = parseInt(params.burst || "0", 10);
+    if (burst > 0) {
+        var remaining = burst;
+        var runNext = function () {
+            if (remaining <= 0) {
+                state.done = true;
+                status("burst complete: " + burst + " batches");
+                return;
+            }
+            remaining--;
+            addBatch(runNext);
+        };
+        status("burst mode: running " + burst + " batches");
+        runNext();
+        return;
+    }
+
+    status("infinite scroll mode: content loads as you approach the bottom");
+    function maybeLoad() {
+        if (state.pending || state.done) {
+            return;
+        }
+        var nearBottom = window.scrollY + window.innerHeight >
+            document.documentElement.scrollHeight - 800;
+        if (nearBottom) {
+            state.pending = true;
+            addBatch(null);
+        }
+    }
+    window.addEventListener("scroll", maybeLoad);
+    // The intro article is shorter than a desktop viewport, so the page has
+    // no scrollbar and scroll events never fire. A periodic check seeds
+    // batches until the page is scrollable, then keeps loading near the
+    // bottom even when scroll events are missed (resize, zoom, keyboard
+    // navigation).
+    setInterval(maybeLoad, 700);
+})();
+</script>
+<script src="/assets/site.js"></script>
+</body>
+</html>

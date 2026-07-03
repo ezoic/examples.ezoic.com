@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sidebar — snippet in the sidebar column | Ezoic Examples</title>
+<meta name="description" content="Id-less showAds in a two-column desktop layout: one snippet in content, one in the sidebar.">
+<link rel="stylesheet" href="/assets/site.css">
+<script data-cfasync="false" src="https://cmp.gatekeeperconsent.com/min.js"></script>
+<script data-cfasync="false" src="https://the.gatekeeperconsent.com/cmp.min.js"></script>
+<script async src="//www.ezojs.com/ezoic/sa.min.js"></script>
+<script>
+    window.ezstandalone = window.ezstandalone || {};
+    ezstandalone.cmd = ezstandalone.cmd || [];
+</script>
+</head>
+<body data-idless-debug>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/">Ezoic<span>Examples</span></a>
+    <nav class="site-nav">
+      <a href="/idless/">Id-less showAds</a>
+      <a href="/game-sdk/">Web Game SDK</a>
+      <a href="https://docs.ezoic.com">Docs</a>
+    </nav>
+  </div>
+</header>
+
+<div class="layout">
+<main>
+    <div class="explainer">
+      <h2>What this demonstrates</h2>
+      <div class="explainer-body">A desktop layout with a main content column and a 300px sidebar.
+      One snippet sits in the content after the first paragraph, and one sits inside the sidebar
+      between two widgets. On desktop the sidebar snippet classifies as a sidebar position; on
+      mobile the column is hidden by CSS and only the label changes.</div>
+    </div>
+
+    <div class="snippet-label">Integration used on this page</div>
+    <pre class="snippet"><code>&lt;!-- Head: consent + Ezoic standalone loader --&gt;
+&lt;script data-cfasync="false" src="https://cmp.gatekeeperconsent.com/min.js"&gt;&lt;/script&gt;
+&lt;script data-cfasync="false" src="https://the.gatekeeperconsent.com/cmp.min.js"&gt;&lt;/script&gt;
+&lt;script async src="//www.ezojs.com/ezoic/sa.min.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+  window.ezstandalone = window.ezstandalone || {};
+  ezstandalone.cmd = ezstandalone.cmd || [];
+&lt;/script&gt;
+
+&lt;!-- In content --&gt;
+&lt;script&gt;
+  ezstandalone.cmd.push(function () {
+    ezstandalone.showAds({sizes: "300x250"});
+  });
+&lt;/script&gt;
+
+&lt;!-- In the sidebar --&gt;
+&lt;script&gt;
+  ezstandalone.cmd.push(function () {
+    ezstandalone.showAds({sizes: "300x600"});
+  });
+&lt;/script&gt;</code></pre>
+
+    <article>
+        <h1>Two-column layout with a sidebar snippet</h1>
+        <p>This desktop layout has a main content column and a 300px sidebar. One snippet sits in
+        the content after this first paragraph, and one sits inside the sidebar between two
+        widgets.</p>
+
+        <script>
+            ezstandalone.cmd.push(function () {
+                ezstandalone.showAds({sizes: "300x250"});
+            });
+        </script>
+
+        <p>On a desktop viewport the sidebar snippet should classify as a sidebar position and
+        claim id 903, staying exactly where the script is inside the column. On mobile the column
+        is hidden by CSS; the ad still belongs to the script's spot, only the label changes to a
+        content position.</p>
+        <p>A third paragraph fills out the main column so the content root is measurably a column
+        beside the sidebar, which the geometry gate uses to accept the sidebar candidate.</p>
+    </article>
+</main>
+<aside class="sidebar">
+    <div class="widget">About widget — sidebar filler content.</div>
+
+    <script>
+        ezstandalone.cmd.push(function () {
+            ezstandalone.showAds({sizes: "300x600"});
+        });
+    </script>
+
+    <div class="widget">Recent posts widget — sidebar filler content.</div>
+</aside>
+</div>
+
+<script src="/assets/site.js"></script>
+</body>
+</html>

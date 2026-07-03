@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Multi — four snippets through a long article | Ezoic Examples</title>
+<meta name="description" content="Four id-less showAds snippets spread through a long article, resolved in document order.">
+<link rel="stylesheet" href="/assets/site.css">
+<script data-cfasync="false" src="https://cmp.gatekeeperconsent.com/min.js"></script>
+<script data-cfasync="false" src="https://the.gatekeeperconsent.com/cmp.min.js"></script>
+<script async src="//www.ezojs.com/ezoic/sa.min.js"></script>
+<script>
+    window.ezstandalone = window.ezstandalone || {};
+    ezstandalone.cmd = ezstandalone.cmd || [];
+</script>
+</head>
+<body data-idless-debug>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/">Ezoic<span>Examples</span></a>
+    <nav class="site-nav">
+      <a href="/idless/">Id-less showAds</a>
+      <a href="/game-sdk/">Web Game SDK</a>
+      <a href="https://docs.ezoic.com">Docs</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap prose article">
+  <div class="explainer">
+    <h2>What this demonstrates</h2>
+    <div class="explainer-body">A long article carrying four snippets: one above the title, one
+    after the second paragraph, one deeper in the body, and one at the very end. Each snippet places
+    exactly one ad at its own position — ads never stack and never move. The ids the snippets claim
+    read in document order.</div>
+  </div>
+
+  <div class="snippet-label">Integration used on this page</div>
+  <pre class="snippet"><code>&lt;!-- Head: consent + Ezoic standalone loader --&gt;
+&lt;script data-cfasync="false" src="https://cmp.gatekeeperconsent.com/min.js"&gt;&lt;/script&gt;
+&lt;script data-cfasync="false" src="https://the.gatekeeperconsent.com/cmp.min.js"&gt;&lt;/script&gt;
+&lt;script async src="//www.ezojs.com/ezoic/sa.min.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+  window.ezstandalone = window.ezstandalone || {};
+  ezstandalone.cmd = ezstandalone.cmd || [];
+&lt;/script&gt;
+
+&lt;!-- Body: one snippet per ad spot, in document order --&gt;
+&lt;script&gt;
+  ezstandalone.cmd.push(function () {
+    ezstandalone.showAds({sizes: "300x250"});
+  });
+&lt;/script&gt;</code></pre>
+
+  <article>
+    <script>
+        ezstandalone.cmd.push(function () {
+            ezstandalone.showAds({sizes: "728x90"});
+        });
+    </script>
+
+    <h1>Several ads, one snippet per spot</h1>
+    <p>This long article carries four snippets: one above the title, one after the second
+    paragraph, one deeper in the body, and one at the very end. Each snippet places exactly one
+    ad at its own position — ads never stack and never move.</p>
+    <p>Second paragraph. The snippet right below this text is the second ad spot, so its label
+    should be <code>under_second_paragraph</code> and its id 910.</p>
+
+    <script>
+        ezstandalone.cmd.push(function () {
+            ezstandalone.showAds({sizes: "300x250"});
+        });
+    </script>
+
+    <p>Third paragraph. The ids the four snippets claim should read in document order — earlier
+    spots claim earlier positions in the generated pool, later spots walk down through the
+    incontent range.</p>
+    <p>Fourth paragraph of filler content that gives the deeper snippet a realistic distance from
+    the one above it.</p>
+    <p>Fifth paragraph. Five of eight paragraphs precede the next snippet, which puts it in the
+    long-content bucket territory.</p>
+
+    <script>
+        ezstandalone.cmd.push(function () {
+            ezstandalone.showAds({sizes: "300x250"});
+        });
+    </script>
+
+    <p>Sixth paragraph, following the third ad spot.</p>
+    <p>Seventh paragraph as the article winds down toward the final placement.</p>
+    <p>Eighth and final paragraph. The last snippet sits below this text at the very end of the
+    article — the bottom_of_page position.</p>
+
+    <script>
+        ezstandalone.cmd.push(function () {
+            ezstandalone.showAds({sizes: "300x250"});
+        });
+    </script>
+  </article>
+</main>
+
+<script src="/assets/site.js"></script>
+</body>
+</html>

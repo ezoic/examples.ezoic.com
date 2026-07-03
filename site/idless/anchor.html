@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Anchor — programmatic placement via selector | Ezoic Examples</title>
+<meta name="description" content="Id-less showAds with an anchor CSS selector, the pattern for SPAs and frameworks.">
+<link rel="stylesheet" href="/assets/site.css">
+<script data-cfasync="false" src="https://cmp.gatekeeperconsent.com/min.js"></script>
+<script data-cfasync="false" src="https://the.gatekeeperconsent.com/cmp.min.js"></script>
+<script async src="//www.ezojs.com/ezoic/sa.min.js"></script>
+<script>
+    window.ezstandalone = window.ezstandalone || {};
+    ezstandalone.cmd = ezstandalone.cmd || [];
+</script>
+</head>
+<body data-idless-debug>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/">Ezoic<span>Examples</span></a>
+    <nav class="site-nav">
+      <a href="/idless/">Id-less showAds</a>
+      <a href="/game-sdk/">Web Game SDK</a>
+      <a href="https://docs.ezoic.com">Docs</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap prose article">
+  <div class="explainer">
+    <h2>What this demonstrates</h2>
+    <div class="explainer-body">No inline snippet marks the ad spot. Instead an app-style script
+    calls <code>showAds</code> with an anchor CSS selector — the pattern for SPAs and frameworks
+    where the call site is nowhere near the desired position. The driver builds the method name by
+    string concatenation (<code>"show" + "Ads"</code>) so the inline-script scanner never mistakes
+    it for a snippet.</div>
+  </div>
+
+  <div class="snippet-label">Integration used on this page</div>
+  <pre class="snippet"><code>&lt;!-- Head: consent + Ezoic standalone loader --&gt;
+&lt;script data-cfasync="false" src="https://cmp.gatekeeperconsent.com/min.js"&gt;&lt;/script&gt;
+&lt;script data-cfasync="false" src="https://the.gatekeeperconsent.com/cmp.min.js"&gt;&lt;/script&gt;
+&lt;script async src="//www.ezojs.com/ezoic/sa.min.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+  window.ezstandalone = window.ezstandalone || {};
+  ezstandalone.cmd = ezstandalone.cmd || [];
+&lt;/script&gt;
+
+&lt;!-- App-style driver: method name split so it is not scanned as a snippet --&gt;
+&lt;script&gt;
+  ezstandalone.cmd.push(function () {
+    window.ezstandalone["show" + "Ads"]({anchor: "#after-me", sizes: "300x250"});
+  });
+&lt;/script&gt;</code></pre>
+
+  <article>
+    <h1>Explicit anchor from JavaScript</h1>
+    <p>No inline snippet marks the ad spot on this page. Instead, an app-style script at the
+    bottom calls showAds with an anchor CSS selector, the pattern for SPAs and frameworks where
+    the call site is nowhere near the desired position.</p>
+    <div id="after-me" class="anchor-box">The ad should appear directly below this highlighted box
+    — it is the anchor target.</div>
+    <p>Second paragraph, after the anchor target. The explicit anchor takes precedence over
+    everything else, including the position of the calling script.</p>
+    <p>Third paragraph closing out the article.</p>
+  </article>
+</main>
+
+<script>
+    // App-style call: method name is split so this driver script can never be
+    // mistaken for an inline snippet by the document-order scanner.
+    ezstandalone.cmd.push(function () {
+        window.ezstandalone["show" + "Ads"]({anchor: "#after-me", sizes: "300x250"});
+    });
+</script>
+<script src="/assets/site.js"></script>
+</body>
+</html>

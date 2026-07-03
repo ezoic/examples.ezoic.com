@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Queued — document-order scan path | Ezoic Examples</title>
+<meta name="description" content="sa.min.js injected 800ms after load; snippets queue first and resolve via the document-order scan.">
+<link rel="stylesheet" href="/assets/site.css">
+<script data-cfasync="false" src="https://cmp.gatekeeperconsent.com/min.js"></script>
+<script data-cfasync="false" src="https://the.gatekeeperconsent.com/cmp.min.js"></script>
+<script>
+    window.ezstandalone = window.ezstandalone || {};
+    ezstandalone.cmd = ezstandalone.cmd || [];
+    // sa.min.js is injected 800ms after window load, so every snippet below has
+    // already pushed into the plain cmd array by then. When sa drains the queue,
+    // document.currentScript is null — the resolver must fall back to the
+    // document-order scan and match Nth queued call to Nth unconsumed snippet.
+    window.addEventListener("load", function () {
+        setTimeout(function () {
+            var s = document.createElement("script");
+            s.src = "https://www.ezojs.com/ezoic/sa.min.js";
+            document.head.appendChild(s);
+        }, 800);
+    });
+</script>
+</head>
+<body data-idless-debug>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/">Ezoic<span>Examples</span></a>
+    <nav class="site-nav">
+      <a href="/idless/">Id-less showAds</a>
+      <a href="/game-sdk/">Web Game SDK</a>
+      <a href="https://docs.ezoic.com">Docs</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap prose article">
+  <div class="explainer">
+    <h2>What this demonstrates</h2>
+    <div class="explainer-body">The Ezoic loader is injected 800 milliseconds after the window
+    load event. Every snippet queues into a plain array long before <code>sa.min.js</code> exists,
+    which kills the <code>currentScript</code> fast path and forces the document-order scan: the
+    Nth drained call matches the Nth unconsumed snippet.</div>
+  </div>
+
+  <div class="snippet-label">Integration used on this page</div>
+  <pre class="snippet"><code>&lt;!-- Head: consent + queue, loader injected later --&gt;
+&lt;script data-cfasync="false" src="https://cmp.gatekeeperconsent.com/min.js"&gt;&lt;/script&gt;
+&lt;script data-cfasync="false" src="https://the.gatekeeperconsent.com/cmp.min.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+  window.ezstandalone = window.ezstandalone || {};
+  ezstandalone.cmd = ezstandalone.cmd || [];
+  window.addEventListener("load", function () {
+    setTimeout(function () {
+      var s = document.createElement("script");
+      s.src = "https://www.ezojs.com/ezoic/sa.min.js";
+      document.head.appendChild(s);
+    }, 800);
+  });
+&lt;/script&gt;
+
+&lt;!-- Body: queues before the loader exists --&gt;
+&lt;script&gt;
+  ezstandalone.cmd.push(function () {
+    ezstandalone.showAds({sizes: "300x250"});
+  });
+&lt;/script&gt;</code></pre>
+
+  <article>
+    <h1>Late loader — scan path</h1>
+    <p>The Ezoic loader on this page is injected 800 milliseconds after the window load event.
+    Every snippet queues into a plain array long before sa.min.js exists, which kills the
+    currentScript fast path and forces the document-order scan.</p>
+
+    <script>
+        ezstandalone.cmd.push(function () {
+            ezstandalone.showAds({sizes: "300x250"});
+        });
+    </script>
+
+    <p>Second paragraph, after the first queued spot. The scan must consume snippets in document
+    order: the first drained call matches this page's first snippet, the second call the second
+    snippet.</p>
+    <p>Third paragraph giving the article some body before the final queued spot below.</p>
+
+    <script>
+        ezstandalone.cmd.push(function () {
+            ezstandalone.showAds({sizes: "300x250"});
+        });
+    </script>
+
+    <p>Fourth paragraph closing out the article after the second ad spot.</p>
+  </article>
+</main>
+
+<script src="/assets/site.js"></script>
+</body>
+</html>

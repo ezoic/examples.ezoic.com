@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Top — snippet above the title | Ezoic Examples</title>
+<meta name="description" content="Id-less showAds snippet placed before the headline, classified as top_of_page.">
+<link rel="stylesheet" href="/assets/site.css">
+<script data-cfasync="false" src="https://cmp.gatekeeperconsent.com/min.js"></script>
+<script data-cfasync="false" src="https://the.gatekeeperconsent.com/cmp.min.js"></script>
+<script async src="//www.ezojs.com/ezoic/sa.min.js"></script>
+<script>
+    window.ezstandalone = window.ezstandalone || {};
+    ezstandalone.cmd = ezstandalone.cmd || [];
+</script>
+</head>
+<body data-idless-debug>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/">Ezoic<span>Examples</span></a>
+    <nav class="site-nav">
+      <a href="/idless/">Id-less showAds</a>
+      <a href="/game-sdk/">Web Game SDK</a>
+      <a href="https://docs.ezoic.com">Docs</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap prose article">
+  <div class="explainer">
+    <h2>What this demonstrates</h2>
+    <div class="explainer-body">The snippet sits before the headline, so the ad renders above the
+    title — a classic leaderboard position. No paragraphs precede the script, which classifies the
+    spot as <code>top_of_page</code> and claims id 900.</div>
+  </div>
+
+  <div class="snippet-label">Integration used on this page</div>
+  <pre class="snippet"><code>&lt;!-- Head: consent + Ezoic standalone loader --&gt;
+&lt;script data-cfasync="false" src="https://cmp.gatekeeperconsent.com/min.js"&gt;&lt;/script&gt;
+&lt;script data-cfasync="false" src="https://the.gatekeeperconsent.com/cmp.min.js"&gt;&lt;/script&gt;
+&lt;script async src="//www.ezojs.com/ezoic/sa.min.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+  window.ezstandalone = window.ezstandalone || {};
+  ezstandalone.cmd = ezstandalone.cmd || [];
+&lt;/script&gt;
+
+&lt;!-- Body: placed before the title for a leaderboard --&gt;
+&lt;script&gt;
+  ezstandalone.cmd.push(function () {
+    ezstandalone.showAds({sizes: "728x90"});
+  });
+&lt;/script&gt;</code></pre>
+
+  <article>
+    <script>
+        ezstandalone.cmd.push(function () {
+            ezstandalone.showAds({sizes: "728x90"});
+        });
+    </script>
+
+    <h1>Snippet above the title</h1>
+    <p>The snippet on this page sits before the headline, so the ad should render above the title
+    — a classic leaderboard position. No paragraphs precede the script, which classifies the spot
+    as <code>top_of_page</code> and claims id 900.</p>
+    <p>Everything below is ordinary article content. The placement must not move anywhere else on
+    the page regardless of how much content follows.</p>
+    <p>A third paragraph pads the article out so the page reads like real content and the
+    paragraph-counting label logic has a normal document to work with.</p>
+  </article>
+</main>
+
+<script src="/assets/site.js"></script>
+</body>
+</html>

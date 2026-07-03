@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Location — named position from JavaScript | Ezoic Examples</title>
+<meta name="description" content="Id-less showAds placed purely by location name, with no script anchor.">
+<link rel="stylesheet" href="/assets/site.css">
+<script data-cfasync="false" src="https://cmp.gatekeeperconsent.com/min.js"></script>
+<script data-cfasync="false" src="https://the.gatekeeperconsent.com/cmp.min.js"></script>
+<script async src="//www.ezojs.com/ezoic/sa.min.js"></script>
+<script>
+    window.ezstandalone = window.ezstandalone || {};
+    ezstandalone.cmd = ezstandalone.cmd || [];
+</script>
+</head>
+<body data-idless-debug>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/">Ezoic<span>Examples</span></a>
+    <nav class="site-nav">
+      <a href="/idless/">Id-less showAds</a>
+      <a href="/game-sdk/">Web Game SDK</a>
+      <a href="https://docs.ezoic.com">Docs</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap prose article">
+  <div class="explainer">
+    <h2>What this demonstrates</h2>
+    <div class="explainer-body">Two ads placed purely by location name —
+    <code>top_of_page</code> and <code>under_first_paragraph</code> — from a script that runs
+    inside a timeout, so no script anchor exists and the resolver derives the insertion point from
+    the name alone. The method name is split (<code>"show" + "Ads"</code>) so the scanner cannot
+    match the driver.</div>
+  </div>
+
+  <div class="snippet-label">Integration used on this page</div>
+  <pre class="snippet"><code>&lt;!-- Head: consent + Ezoic standalone loader --&gt;
+&lt;script data-cfasync="false" src="https://cmp.gatekeeperconsent.com/min.js"&gt;&lt;/script&gt;
+&lt;script data-cfasync="false" src="https://the.gatekeeperconsent.com/cmp.min.js"&gt;&lt;/script&gt;
+&lt;script async src="//www.ezojs.com/ezoic/sa.min.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+  window.ezstandalone = window.ezstandalone || {};
+  ezstandalone.cmd = ezstandalone.cmd || [];
+&lt;/script&gt;
+
+&lt;!-- Driver: placement by location name, no anchor --&gt;
+&lt;script&gt;
+  ezstandalone.cmd.push(function () {
+    setTimeout(function () {
+      window.ezstandalone["show" + "Ads"](
+        {location: "top_of_page", sizes: "728x90"},
+        {location: "under_first_paragraph", sizes: "300x250"}
+      );
+    }, 0);
+  });
+&lt;/script&gt;</code></pre>
+
+  <article>
+    <h1>Named location without an anchor</h1>
+    <p>This page places two ads purely by location name — top_of_page and under_first_paragraph —
+    from a script that runs inside a timeout, so no script anchor exists and the resolver must
+    derive the insertion point from the name alone.</p>
+    <p>Second paragraph. The under_first_paragraph ad should have landed between the first
+    paragraph and this one; the top_of_page ad above the headline.</p>
+    <p>Third paragraph closing out the article.</p>
+  </article>
+</main>
+
+<script>
+    // Runs from a timeout so document.currentScript is null and the method name
+    // is split so the scanner cannot match this driver script — placement must
+    // come purely from the location names.
+    ezstandalone.cmd.push(function () {
+        setTimeout(function () {
+            window.ezstandalone["show" + "Ads"](
+                {location: "top_of_page", sizes: "728x90"},
+                {location: "under_first_paragraph", sizes: "300x250"}
+            );
+        }, 0);
+    });
+</script>
+<script src="/assets/site.js"></script>
+</body>
+</html>
