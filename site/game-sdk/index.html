@@ -40,7 +40,8 @@
     <code>window.EzGameSDK</code>. The SDK talks to the parent page over a
     <code>postMessage</code> bridge inside <code>sa.min.js</code>; the parent — the
     ads.txt-approved domain — runs the auction and renders ad breaks, rewarded ads, and banners.
-    The game never runs an auction itself.</p>
+    The game never runs an auction itself. Break modals are confined to the game's
+    play area, not the whole page.</p>
   </section>
 
   <section class="panel">
@@ -82,21 +83,76 @@
 
   window.EzGameSDK.cmd.push(function () {
     // Detects environment and handshakes with the parent bridge.
-    EzGameSDK.init({ breakCooldownSec: 30 }).then(function () {
+    // breakCooldownSec is optional (default 5, max 3600, 0 disables the gate).
+    EzGameSDK.init({ breakCooldownSec: 5 }).then(function () {
       // Interstitial before gameplay starts. Pause and mute in onStart.
       EzGameSDK.commercialBreak({ position: "preroll", onStart: pauseGame });
     });
   });
 
-  // Rewarded ad: grant the reward only when rewarded === true.
+  // Between levels: format picks the demand.
+  // 'auto' (default) = video ad with display fallback,
+  // 'display' = display ad only, 'video' = video ad only (fails if no video fill).
+  function onLevelComplete() {
+    EzGameSDK.commercialBreak({ position: "midgame", format: "display", onStart: pauseGame })
+      .then(function (r) { if (!r.success) { resumeGame(); } });
+  }
+
+  // Rewarded ad: must be user-opted-in (offer it as a choice, never auto-fire).
+  // Grant the reward only when rewarded === true.
   function offerReward() {
     EzGameSDK.rewardedBreak({ rewardName: "extra_life", onStart: pauseGame })
       .then(function (r) { if (r.rewarded) { grantExtraLife(); } });
   }
 
-  // Anchored banner sized to a box the game reserves.
+  // Anchored banner. Ezoic offers every standard size fitting the box and
+  // resolves only after the fill is confirmed.
   EzGameSDK.showBanner({ width: 320, height: 50, anchor: "bottom" });
+
+  // Gameplay signals: suppress page-level interstitials during play.
+  // EzGameSDK.gameplayStart() / EzGameSDK.gameplayStop()
+
+  // Adblock detection:
+  // EzGameSDK.hasAdBlock().then(function (blocked) { ... });
 &lt;/script&gt;</code></pre>
+  </section>
+
+  <section class="panel">
+    <h2>API reference</h2>
+    <div class="explainer-body">
+      <p><code>init(config?)</code> — handshakes with the parent bridge and resolves
+      <code>{environment}</code> (<code>ezoic</code>, <code>local</code>, or
+      <code>unavailable</code>). Optional <code>breakCooldownSec</code> sets the minimum
+      interval between ad breaks (default 5, clamped 0&ndash;3600, 0 disables). Only the
+      SDK init can set it — games cannot override it per call.</p>
+
+      <p><code>commercialBreak(config?)</code> — full-frame ad break confined to the game's
+      play area. <code>position</code>: <code>'preroll'</code> | <code>'midgame'</code>
+      (default). <code>format</code>: <code>'auto'</code> (video with display fallback,
+      default) | <code>'display'</code> | <code>'video'</code> (no fallback — resolves
+      <code>{success:false, error:'unfilled'}</code> when no video demand fills).
+      <code>onStart</code> fires right before the ad displays — pause and mute there.
+      Resolves <code>{success, error?, message?}</code>; error codes include
+      <code>adCooldown</code>, <code>busy</code>, <code>unfilled</code>,
+      <code>timeout</code>, and <code>internal</code>.</p>
+
+      <p><code>rewardedBreak(config?)</code> — user-opted-in rewarded ad.
+      <code>rewardName</code> labels the reward for analytics. Resolves
+      <code>{success, rewarded, error?}</code>; grant the reward only when
+      <code>rewarded === true</code> (the user watched to completion).</p>
+
+      <p><code>showBanner(config?)</code> / <code>hideBanner()</code> — anchored banner
+      (<code>width</code>, <code>height</code>, <code>anchor: 'top' | 'bottom'</code>).
+      The parent offers every standard ad size that fits the requested box and
+      <code>showBanner</code> resolves only after fill confirmation, so
+      <code>{success:false}</code> genuinely means no ad.</p>
+
+      <p><code>gameplayStart()</code> / <code>gameplayStop()</code> — signal active play;
+      the parent suppresses page-level interstitials while gameplay is active.</p>
+
+      <p><code>hasAdBlock()</code> — resolves <code>true</code> when an ad blocker is
+      detected (bridge-assisted on Ezoic pages, local heuristic elsewhere).</p>
+    </div>
   </section>
 </main>
 
