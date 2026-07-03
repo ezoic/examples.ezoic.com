@@ -48,6 +48,8 @@ Internal links between pages are extensionless (for example `/idless/basic` and
 3. Update the group index (`site/idless/index.html` or the landing page) with a one-line
    description linking to the new page using an extensionless path.
 4. Load the page locally to confirm it renders and the snippet resolves.
+5. Driver scripts that call `showAds` programmatically must never contain the literal
+   token `showAds(` in code or comments — use `window.ezstandalone["show" + "Ads"](...)`.
 
 ## Local preview
 

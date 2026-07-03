@@ -81,10 +81,11 @@
         box.scrollTop = box.scrollHeight;
     }
 
-    // Method name split so the document-order scanner never matches this
-    // driver script; batches run from timeouts so there is no script anchor
-    // and each ad appends at the end of the content — tracking the newest batch.
-    function callShowAds(desc) {
+    // Split-name indexing (window.ezstandalone["show" + "Ads"]) is what keeps
+    // the inline-script scanner from matching this driver script; batches run
+    // from timeouts so there is no script anchor and each ad appends at the
+    // end of the content — tracking the newest batch.
+    function callAd(desc) {
         window.ezstandalone["show" + "Ads"](desc);
         return desc;
     }
@@ -152,7 +153,7 @@
             article.appendChild(p);
         }
         window.ezstandalone.cmd.push(function () {
-            callShowAds({sizes: "300x250"});
+            callAd({sizes: "300x250"});
         });
         setTimeout(function () {
             snapshot();
