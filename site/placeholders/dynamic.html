@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dynamic — show, destroy, re-show placements | Ezoic Examples</title>
+<meta name="description" content="Add placeholder divs (151, 152) with showAds, tear them down with destroyPlaceholders before removing the DOM, then re-show them.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Reddit+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+<script data-cfasync="false" src="https://cmp.gatekeeperconsent.com/min.js"></script>
+<script data-cfasync="false" src="https://the.gatekeeperconsent.com/cmp.min.js"></script>
+<script async src="//www.ezojs.com/ezoic/sa.min.js"></script>
+<script>
+    window.ezstandalone = window.ezstandalone || {};
+    ezstandalone.cmd = ezstandalone.cmd || [];
+</script>
+</head>
+<body class="has-debug-bar">
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/">Ezoic <span>Examples</span></a>
+    <nav class="site-nav">
+      <a href="/idless/">Id-less showAds</a>
+      <a href="/placeholders/">Placement IDs</a>
+      <a href="/game-sdk/">Web Game SDK</a>
+      <a href="https://docs.ezoic.com">Docs</a>
+      <a href="https://github.com/ezoic/examples.ezoic.com">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap prose article">
+  <div class="explainer">
+    <h2>What this demonstrates</h2>
+    <div class="explainer-body">Placements that come and go within a single pageview. When new
+    placeholder divs are added to the page, <code>ezstandalone.showAds(ids)</code> activates them.
+    When that content is removed, <code>ezstandalone.destroyPlaceholders(ids)</code> must run
+    <strong>before</strong> the divs leave the DOM so the slots are torn down cleanly. When the same
+    content becomes visible again, <code>showAds(ids)</code> re-activates it. The buttons below add a
+    comments section carrying placements 151 and 152, tear it down, and re-add it; the status bar
+    logs each call.</div>
+  </div>
+
+  <div class="snippet-label">Integration used on this page</div>
+  <pre class="snippet"><code>&lt;!-- Head: consent + Ezoic standalone loader --&gt;
+&lt;script data-cfasync="false" src="https://cmp.gatekeeperconsent.com/min.js"&gt;&lt;/script&gt;
+&lt;script data-cfasync="false" src="https://the.gatekeeperconsent.com/cmp.min.js"&gt;&lt;/script&gt;
+&lt;script async src="//www.ezojs.com/ezoic/sa.min.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+  window.ezstandalone = window.ezstandalone || {};
+  ezstandalone.cmd = ezstandalone.cmd || [];
+&lt;/script&gt;
+
+&lt;!-- After appending the divs: show the new placements --&gt;
+&lt;script&gt;
+  ezstandalone.cmd.push(function () {
+    ezstandalone.showAds(151, 152);
+  });
+&lt;/script&gt;
+
+&lt;!-- Destroy them BEFORE removing their divs from the DOM --&gt;
+&lt;script&gt;
+  ezstandalone.cmd.push(function () {
+    ezstandalone.destroyPlaceholders(151, 152);
+  });
+&lt;/script&gt;
+
+&lt;!-- Re-show after re-appending the divs --&gt;
+&lt;script&gt;
+  ezstandalone.cmd.push(function () {
+    ezstandalone.showAds(151, 152);
+  });
+&lt;/script&gt;</code></pre>
+
+  <p class="source-row"><a class="source-link" href="https://github.com/ezoic/examples.ezoic.com/blob/master/site/placeholders/dynamic.html">View source on GitHub &rarr;</a></p>
+  <p class="source-row">Docs: <a class="source-link" href="https://docs.ezoic.com/docs/ezoicads/dynamic-content/#new-content">Dynamic Content — New Content</a> &middot; <a class="source-link" href="https://docs.ezoic.com/docs/ezoicads/dynamic-content/#changing-content">Changing Content</a></p>
+
+  <article>
+    <h1>Dynamic content: show, destroy, re-show</h1>
+    <p>This article starts with no comments. The two placements below live inside a comments section
+    that only exists after you load it — a common pattern for lazy-loaded comment widgets, tabs, and
+    expandable panels.</p>
+    <p>Use the buttons to add the comments section (which activates placements 151 and 152), hide it
+    (which destroys them before their divs are removed), and load it again (which re-activates the
+    same ids). Every call is logged in the status bar at the bottom of the page.</p>
+
+    <p>
+      <button type="button" id="load-comments" class="btn">Load comments</button>
+      <button type="button" id="hide-comments" class="btn btn-secondary">Hide comments</button>
+    </p>
+
+    <div id="comments-mount"></div>
+  </article>
+</main>
+
+<div id="status" class="idless-debug"></div>
+<script>
+(function () {
+    var loadBtn = document.getElementById("load-comments");
+    var hideBtn = document.getElementById("hide-comments");
+    var mount = document.getElementById("comments-mount");
+    var statusBox = document.getElementById("status");
+
+    function status(msg) {
+        var line = document.createElement("div");
+        line.appendChild(document.createTextNode(msg));
+        statusBox.appendChild(line);
+        statusBox.scrollTop = statusBox.scrollHeight;
+    }
+
+    // Builds the comments section with two publisher-owned placeholder divs
+    // (151, 152). The ids come from placements created in the Ezoic dashboard.
+    function buildComments() {
+        var section = document.createElement("section");
+        section.id = "comments";
+
+        var h = document.createElement("h2");
+        h.appendChild(document.createTextNode("Comments"));
+        section.appendChild(h);
+
+        var c1 = document.createElement("p");
+        c1.appendChild(document.createTextNode("First reader comment. Comment widgets are frequently loaded on demand, so their in-content ad placements have to be activated after the section is inserted."));
+        section.appendChild(c1);
+
+        var d1 = document.createElement("div");
+        d1.id = "ezoic-pub-ad-placeholder-151";
+        section.appendChild(d1);
+
+        var c2 = document.createElement("p");
+        c2.appendChild(document.createTextNode("Second reader comment. A second placement sits lower in the thread to show that multiple dynamically added ids activate together."));
+        section.appendChild(c2);
+
+        var d2 = document.createElement("div");
+        d2.id = "ezoic-pub-ad-placeholder-152";
+        section.appendChild(d2);
+
+        mount.appendChild(section);
+    }
+
+    function showComments() {
+        buildComments();
+        // New placeholders within the same pageview -> activate by id.
+        ezstandalone.cmd.push(function () {
+            ezstandalone.showAds(151, 152);
+        });
+        status("showAds(151, 152) — comments loaded, placements activated");
+        loadBtn.disabled = true;
+        hideBtn.disabled = false;
+    }
+
+    function hideComments() {
+        // Tear the slots down BEFORE their divs leave the DOM. Once sa.min.js
+        // is initialized, queued functions run synchronously, so this destroy
+        // executes before the removeChild below. (Before init nothing has been
+        // shown yet, so the queued destroy is a harmless no-op.)
+        ezstandalone.cmd.push(function () {
+            ezstandalone.destroyPlaceholders(151, 152);
+        });
+        status("destroyPlaceholders(151, 152) — called before removing the DOM");
+        var section = document.getElementById("comments");
+        if (section) {
+            section.parentNode.removeChild(section);
+        }
+        loadBtn.disabled = false;
+        hideBtn.disabled = true;
+    }
+
+    loadBtn.addEventListener("click", showComments);
+    hideBtn.addEventListener("click", hideComments);
+    hideBtn.disabled = true;
+    status("ready — click \"Load comments\" to append placements 151 and 152");
+})();
+</script>
+<script src="/assets/site.js"></script>
+</body>
+</html>

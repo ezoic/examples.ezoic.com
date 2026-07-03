@@ -23,6 +23,7 @@
     <a class="brand" href="/">Ezoic <span>Examples</span></a>
     <nav class="site-nav">
       <a href="/idless/">Id-less showAds</a>
+      <a href="/placeholders/">Placement IDs</a>
       <a href="/game-sdk/">Web Game SDK</a>
       <a href="https://docs.ezoic.com">Docs</a>
       <a href="https://github.com/ezoic/examples.ezoic.com">GitHub</a>
@@ -61,6 +62,7 @@
 &lt;/script&gt;</code></pre>
 
   <p class="source-row"><a class="source-link" href="https://github.com/ezoic/examples.ezoic.com/blob/master/site/idless/infinite.html">View source on GitHub &rarr;</a></p>
+  <p class="source-row">Docs: <a class="source-link" href="https://docs.ezoic.com/docs/ezoicads/implementation/#placing-ads-from-javascript">Ad Placements — Placing Ads From JavaScript</a> &middot; <a class="source-link" href="https://docs.ezoic.com/docs/ezoicads/dynamic-content/#infinite-scroll">Dynamic Content — Infinite Scroll</a></p>
 
   <article id="article">
     <h1>Infinite scroll — id exhaustion and recycling</h1>
@@ -80,7 +82,7 @@
 (function () {
     var params = {};
     window.location.search.replace(/[?&]([^=&]+)=([^&]*)/g, function (m, k, v) {
-        params[k] = decodeURIComponent(v);
+        try { params[k] = decodeURIComponent(v); } catch (e) { params[k] = v; }
     });
 
     function status(msg) {

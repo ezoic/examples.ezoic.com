@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Placement IDs examples — Ezoic Examples</title>
+<meta name="description" content="Standalone publisher pages using Ezoic placement ids: dashboard-created placements with publisher-owned placeholder divs.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Reddit+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+<script data-cfasync="false" src="https://cmp.gatekeeperconsent.com/min.js"></script>
+<script data-cfasync="false" src="https://the.gatekeeperconsent.com/cmp.min.js"></script>
+<script async src="//www.ezojs.com/ezoic/sa.min.js"></script>
+<script>
+    window.ezstandalone = window.ezstandalone || {};
+    ezstandalone.cmd = ezstandalone.cmd || [];
+</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/">Ezoic <span>Examples</span></a>
+    <nav class="site-nav">
+      <a href="/idless/">Id-less showAds</a>
+      <a href="/placeholders/">Placement IDs</a>
+      <a href="/game-sdk/">Web Game SDK</a>
+      <a href="https://docs.ezoic.com">Docs</a>
+      <a href="https://github.com/ezoic/examples.ezoic.com">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <p class="eyebrow">Placement IDs</p>
+    <h1>Placement-id <span class="accent">showAds</span> examples</h1>
+    <p>The advanced setup: you create each placement in the Ezoic dashboard, own the
+    <code>&lt;div id="ezoic-pub-ad-placeholder-<em>N</em>"&gt;</code> markup on the page yourself, and
+    activate it with <code>ezstandalone.showAds(<em>N</em>)</code>. Unlike the id-less setup — where
+    the ad simply goes where the script sits — placement ids give you per-placement dashboard control,
+    reporting, and programmatic targeting through <code>showAds</code>, <code>refreshAds</code>, and
+    <code>destroyPlaceholders</code>.</p>
+    <p class="source-row"><a class="source-link" href="https://github.com/ezoic/examples.ezoic.com/blob/master/site/placeholders/index.html">View source on GitHub &rarr;</a></p>
+    <p class="source-row">Docs: <a class="source-link" href="https://docs.ezoic.com/docs/ezoicads/implementation/#using-placement-ids--advanced-control">Ad Placements — Using Placement IDs</a></p>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title">Examples</h2>
+    <ul class="example-list">
+      <li><a class="row" href="/placeholders/basic"><span class="name">basic</span><span class="desc">one placeholder div (147) activated by <code>showAds(147)</code> — the canonical placement-id setup</span></a></li>
+      <li><a class="row" href="/placeholders/multiple"><span class="name">multiple</span><span class="desc">three placeholder divs (148, 149, 150) activated by one batched <code>showAds(148, 149, 150)</code></span></a></li>
+      <li><a class="row" href="/placeholders/dynamic"><span class="name">dynamic</span><span class="desc">show, destroy, and re-show placeholders (151, 152) as content is added and removed</span></a></li>
+      <li><a class="row" href="/placeholders/infinite"><span class="name">infinite</span><span class="desc">infinite scroll with a unique id per batch from the pool 154&ndash;160 (<code>?burst=N</code> to auto-run)</span></a></li>
+    </ul>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>Ezoic Examples</span>
+    <nav>
+      <a href="https://docs.ezoic.com">docs.ezoic.com</a>
+      <a href="https://www.ezoic.com">www.ezoic.com</a>
+    </nav>
+  </div>
+</footer>
+<script src="/assets/site.js"></script>
+</body>
+</html>

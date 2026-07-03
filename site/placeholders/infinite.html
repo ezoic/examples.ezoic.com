@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Infinite — unique placement id per batch | Ezoic Examples</title>
+<meta name="description" content="Docs-recommended id-based infinite scroll: each appended batch carries the next unused placement id; no id is ever reused.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Reddit+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+<script data-cfasync="false" src="https://cmp.gatekeeperconsent.com/min.js"></script>
+<script data-cfasync="false" src="https://the.gatekeeperconsent.com/cmp.min.js"></script>
+<script async src="//www.ezojs.com/ezoic/sa.min.js"></script>
+<script>
+    window.ezstandalone = window.ezstandalone || {};
+    ezstandalone.cmd = ezstandalone.cmd || [];
+</script>
+</head>
+<body class="has-debug-bar">
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/">Ezoic <span>Examples</span></a>
+    <nav class="site-nav">
+      <a href="/idless/">Id-less showAds</a>
+      <a href="/placeholders/">Placement IDs</a>
+      <a href="/game-sdk/">Web Game SDK</a>
+      <a href="https://docs.ezoic.com">Docs</a>
+      <a href="https://github.com/ezoic/examples.ezoic.com">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap prose article">
+  <div class="explainer">
+    <h2>What this demonstrates</h2>
+    <div class="explainer-body">The docs-recommended way to run ads in an infinite feed with
+    placement ids: each appended batch carries the <strong>next unused</strong> id from a pool of
+    in-content placements and activates it with <code>ezstandalone.showAds(id)</code>. Ids are never
+    reused — the docs warn that duplicate ids on a page cause unpredictable behavior, and reusing an
+    id requires destroying the original placeholder first. When the pool runs out, this page stops
+    adding ad divs rather than reusing ids. This is the id-based counterpart to the id-less recycling
+    variant at <a href="/idless/infinite">/idless/infinite</a>, which destroys the oldest placeholder
+    and reuses its generated id instead. Add <code>?burst=N</code> to the URL to append N batches
+    automatically. <code>window.__placeholdersInfinite</code> exposes the counters for automation.</div>
+  </div>
+
+  <div class="snippet-label">Integration used on this page</div>
+  <pre class="snippet"><code>&lt;!-- Head: consent + Ezoic standalone loader --&gt;
+&lt;script data-cfasync="false" src="https://cmp.gatekeeperconsent.com/min.js"&gt;&lt;/script&gt;
+&lt;script data-cfasync="false" src="https://the.gatekeeperconsent.com/cmp.min.js"&gt;&lt;/script&gt;
+&lt;script async src="//www.ezojs.com/ezoic/sa.min.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+  window.ezstandalone = window.ezstandalone || {};
+  ezstandalone.cmd = ezstandalone.cmd || [];
+&lt;/script&gt;
+
+&lt;!-- Initial in-content placement --&gt;
+&lt;div id="ezoic-pub-ad-placeholder-153"&gt;&lt;/div&gt;
+&lt;script&gt;
+  ezstandalone.cmd.push(function () {
+    ezstandalone.showAds(153);
+  });
+&lt;/script&gt;
+
+&lt;!-- Each appended batch adds the next unused placement id and activates it --&gt;
+&lt;div id="ezoic-pub-ad-placeholder-154"&gt;&lt;/div&gt;
+&lt;script&gt;
+  ezstandalone.cmd.push(function () {
+    ezstandalone.showAds(154);
+  });
+&lt;/script&gt;</code></pre>
+
+  <p class="source-row"><a class="source-link" href="https://github.com/ezoic/examples.ezoic.com/blob/master/site/placeholders/infinite.html">View source on GitHub &rarr;</a></p>
+  <p class="source-row">Docs: <a class="source-link" href="https://docs.ezoic.com/docs/ezoicads/dynamic-content/#infinite-scroll">Dynamic Content — Infinite Scroll</a></p>
+
+  <article id="article">
+    <h1>Infinite scroll with unique ids</h1>
+    <p>This feed uses a fixed pool of in-content placements created in the Ezoic dashboard. The
+    initial article carries placement 153. As you scroll toward the bottom, each new batch of content
+    is followed by the next unused id from the pool [154, 155, 156, 157, 158, 159, 160], activated
+    with its own <code>showAds(id)</code> call.</p>
+    <p>No id is ever reused: the docs warn that duplicate ids on a page cause unpredictable behavior,
+    and reusing an id requires destroying the original placeholder first. When the pool is exhausted
+    this page stops adding ad divs and says so in the status bar. Add <strong>?burst=7</strong> to the
+    URL to append batches automatically.</p>
+
+    <div id="ezoic-pub-ad-placeholder-153"></div>
+  </article>
+</main>
+
+<div id="status" class="idless-debug"></div>
+<script>
+(function () {
+    var params = {};
+    window.location.search.replace(/[?&]([^=&]+)=([^&]*)/g, function (m, k, v) {
+        try { params[k] = decodeURIComponent(v); } catch (e) { params[k] = v; }
+    });
+
+    // Fixed pool of in-content placements created in the dashboard. Ids are
+    // handed out in order and never reused.
+    var POOL = [154, 155, 156, 157, 158, 159, 160];
+    var article = document.getElementById("article");
+    var statusBox = document.getElementById("status");
+    var summary = document.createElement("div");
+    statusBox.appendChild(summary);
+
+    var state = {batches: 0, used: [], exhausted: false, pending: false, done: false};
+    window.__placeholdersInfinite = state;
+
+    function status(msg) {
+        var line = document.createElement("div");
+        line.appendChild(document.createTextNode(msg));
+        statusBox.appendChild(line);
+        statusBox.scrollTop = statusBox.scrollHeight;
+    }
+
+    function updateSummary() {
+        summary.textContent = "infinite: batches=" + state.batches +
+            " idsUsed=" + state.used.length +
+            " poolRemaining=" + (POOL.length - state.used.length) +
+            " exhausted=" + state.exhausted;
+    }
+
+    var FILLER = [
+        "Infinite scroll filler paragraph. Fresh content keeps arriving as the reader approaches the bottom of the page, exactly like a feed or endless article list would behave in production.",
+        "Each appended batch places its own dashboard-created placement id, so every ad slot on the page is unique and reports independently.",
+        "Ids are consumed in order from the pool. Because none is reused, there is never a duplicate placeholder on the page.",
+        "When the pool is empty the feed stops inserting ad divs. To go deeper, create more in-content placements sized for the maximum scroll depth you expect."
+    ];
+
+    // Initial in-content placement (already in the markup above).
+    ezstandalone.cmd.push(function () {
+        ezstandalone.showAds(153);
+    });
+    status("initial article: showAds(153)");
+    updateSummary();
+
+    function addBatch(done) {
+        state.batches++;
+        for (var i = 0; i < 4; i++) {
+            var p = document.createElement("p");
+            p.appendChild(document.createTextNode("[batch " + state.batches + "." + (i + 1) + "] " + FILLER[i % FILLER.length]));
+            article.appendChild(p);
+        }
+
+        if (state.used.length >= POOL.length) {
+            if (!state.exhausted) {
+                state.exhausted = true;
+                status("id pool exhausted — create enough in-content placements for your maximum scroll depth");
+            }
+            state.done = true;
+            updateSummary();
+            if (done) {
+                done();
+            }
+            return;
+        }
+
+        var id = POOL[state.used.length];
+        state.used.push(id);
+        var div = document.createElement("div");
+        div.id = "ezoic-pub-ad-placeholder-" + id;
+        article.appendChild(div);
+        // Activate the newly added placement. Each batch gets its own unique id.
+        ezstandalone.cmd.push(function () {
+            ezstandalone.showAds(id);
+        });
+        status("batch " + state.batches + ": showAds(" + id + ")");
+        updateSummary();
+        if (done) {
+            done();
+        }
+    }
+
+    var burst = parseInt(params.burst || "0", 10);
+    if (burst > 0) {
+        var remaining = burst;
+        var runNext = function () {
+            if (state.done || remaining <= 0) {
+                status("burst complete: " + state.batches + " batches");
+                return;
+            }
+            remaining--;
+            addBatch(runNext);
+        };
+        status("burst mode: running up to " + burst + " batches");
+        runNext();
+        return;
+    }
+
+    status("infinite scroll mode: content loads as you approach the bottom");
+    function maybeLoad() {
+        if (state.pending || state.done) {
+            return;
+        }
+        var nearBottom = window.scrollY + window.innerHeight >
+            document.documentElement.scrollHeight - 800;
+        if (nearBottom) {
+            state.pending = true;
+            addBatch(function () {
+                state.pending = false;
+            });
+        }
+    }
+    window.addEventListener("scroll", maybeLoad);
+    // The intro article is shorter than a desktop viewport, so the page has no
+    // scrollbar and scroll events never fire. A periodic check seeds batches
+    // until the page is scrollable, then keeps loading near the bottom.
+    setInterval(maybeLoad, 700);
+})();
+</script>
+<script src="/assets/site.js"></script>
+</body>
+</html>

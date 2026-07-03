@@ -28,6 +28,12 @@ site/
     anchor.html         Programmatic placement via a CSS selector
     location.html       Named location placement, no anchor
     infinite.html       Infinite scroll: id exhaustion and recycling
+  placeholders/
+    index.html          Index of the placement-id examples
+    basic.html          One dashboard placement div + showAds(id)
+    multiple.html       Three divs, one batched showAds(id, id, id) call
+    dynamic.html        Lazy-loaded content: showAds, destroyPlaceholders, re-show
+    infinite.html       Infinite scroll with a unique id per batch (no reuse)
   game-sdk/
     index.html          Web Game SDK demo (cross-origin game + bridge log)
 ```
@@ -49,8 +55,12 @@ Internal links between pages are extensionless (for example `/idless/basic` and
 3. Update the group index (`site/idless/index.html` or the landing page) with a one-line
    description linking to the new page using an extensionless path.
 4. Load the page locally to confirm it renders and the snippet resolves.
-5. Driver scripts that call `showAds` programmatically must never contain the literal
-   token `showAds(` in code or comments — use `window.ezstandalone["show" + "Ads"](...)`.
+5. On **id-less** pages, driver scripts that call `showAds` programmatically must never
+   contain the literal token `showAds(` in code or comments — the id-less resolver scans
+   inline scripts for that token to place ads, so use
+   `window.ezstandalone["show" + "Ads"](...)` instead. This does not apply to
+   placement-id pages (`site/placeholders/`): `showAds(147)` with numeric ids places into
+   the matching `ezoic-pub-ad-placeholder-147` div, not at the script position.
 
 ## Local preview
 

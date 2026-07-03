@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Basic — one placement div activated by showAds(147) | Ezoic Examples</title>
+<meta name="description" content="The canonical placement-id setup: a publisher-owned placeholder div activated by ezstandalone.showAds(147).">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Reddit+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+<script data-cfasync="false" src="https://cmp.gatekeeperconsent.com/min.js"></script>
+<script data-cfasync="false" src="https://the.gatekeeperconsent.com/cmp.min.js"></script>
+<script async src="//www.ezojs.com/ezoic/sa.min.js"></script>
+<script>
+    window.ezstandalone = window.ezstandalone || {};
+    ezstandalone.cmd = ezstandalone.cmd || [];
+</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/">Ezoic <span>Examples</span></a>
+    <nav class="site-nav">
+      <a href="/idless/">Id-less showAds</a>
+      <a href="/placeholders/">Placement IDs</a>
+      <a href="/game-sdk/">Web Game SDK</a>
+      <a href="https://docs.ezoic.com">Docs</a>
+      <a href="https://github.com/ezoic/examples.ezoic.com">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap prose article">
+  <div class="explainer">
+    <h2>What this demonstrates</h2>
+    <div class="explainer-body">The canonical placement-id setup. The
+    <code>&lt;div id="ezoic-pub-ad-placeholder-147"&gt;</code> is markup the page owns — the id comes
+    from a placement created in the Ezoic dashboard. <code>ezstandalone.showAds(147)</code> activates
+    it and the ad renders inside that div. The div carries no width, height, or margin: the docs warn
+    that styling a placeholder leaves empty space if the ad does not fill.</div>
+  </div>
+
+  <div class="snippet-label">Integration used on this page</div>
+  <pre class="snippet"><code>&lt;!-- Head: consent + Ezoic standalone loader --&gt;
+&lt;script data-cfasync="false" src="https://cmp.gatekeeperconsent.com/min.js"&gt;&lt;/script&gt;
+&lt;script data-cfasync="false" src="https://the.gatekeeperconsent.com/cmp.min.js"&gt;&lt;/script&gt;
+&lt;script async src="//www.ezojs.com/ezoic/sa.min.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+  window.ezstandalone = window.ezstandalone || {};
+  ezstandalone.cmd = ezstandalone.cmd || [];
+&lt;/script&gt;
+
+&lt;!-- Body: publisher-owned placeholder div + activation call --&gt;
+&lt;div id="ezoic-pub-ad-placeholder-147"&gt;&lt;/div&gt;
+&lt;script&gt;
+  ezstandalone.cmd.push(function () {
+    ezstandalone.showAds(147);
+  });
+&lt;/script&gt;</code></pre>
+
+  <p class="source-row"><a class="source-link" href="https://github.com/ezoic/examples.ezoic.com/blob/master/site/placeholders/basic.html">View source on GitHub &rarr;</a></p>
+  <p class="source-row">Docs: <a class="source-link" href="https://docs.ezoic.com/docs/ezoicads/implementation/#using-placement-ids--advanced-control">Ad Placements — Using Placement IDs</a></p>
+
+  <article>
+    <h1>The canonical placement-id setup</h1>
+    <p>This page is what the advanced setup looks like: a placement id was created in the Ezoic
+    dashboard, and the matching placeholder div lives in the page's own markup. Nothing about the
+    position is inferred — the div is exactly where the ad renders.</p>
+    <p>The paragraph above is the first content block and this is the second. Directly below sits the
+    placeholder div and the activation call. The div is empty markup on its own; it fills only after
+    <code>showAds(147)</code> runs and the auction returns an ad.</p>
+
+    <div id="ezoic-pub-ad-placeholder-147"></div>
+    <script>
+        ezstandalone.cmd.push(function () {
+            ezstandalone.showAds(147);
+        });
+    </script>
+
+    <p>This third paragraph continues after the placement. Because the div is unstyled, if no ad fills
+    it collapses to nothing rather than leaving a fixed empty box — which is why the docs advise
+    against putting width, height, or margin on placeholder divs.</p>
+    <p>A final paragraph keeps the article long enough to read like real content rather than a
+    fixture.</p>
+  </article>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>Ezoic Examples</span>
+    <nav>
+      <a href="https://docs.ezoic.com">docs.ezoic.com</a>
+      <a href="https://www.ezoic.com">www.ezoic.com</a>
+    </nav>
+  </div>
+</footer>
+<script src="/assets/site.js"></script>
+</body>
+</html>
