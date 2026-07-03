@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Angular SDK examples — @ezoic/angular-sdk | Ezoic Examples</title>
+<meta name="description" content="Compiled Angular integrations of @ezoic/angular-sdk: basic display, zero-config placement, SPA navigation, dynamic content, rewarded ads and video.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Reddit+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+<!-- Built from @ezoic/angular-sdk v1.0.0 (examples/site-demos) -->
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/">Ezoic <span>Examples</span></a>
+    <nav class="site-nav">
+      <a href="/idless/">Id-less showAds</a>
+      <a href="/placeholders/">Placement IDs</a>
+      <a href="/game-sdk/">Web Game SDK</a>
+      <a href="/angular-sdk/">Angular SDK</a>
+      <a href="https://docs.ezoic.com">Docs</a>
+      <a href="https://github.com/ezoic/examples.ezoic.com">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <p class="eyebrow">Ezoic Examples</p>
+    <h1>Angular SDK examples — <span class="accent">@ezoic/angular-sdk</span></h1>
+    <p>Six real, compiled Angular integrations of the official <code>@ezoic/angular-sdk</code>. Each
+    page embeds an actual built Angular bundle — not hand-written vanilla JS — so you can read the
+    exact component code a publisher would ship.</p>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title">Scenarios</h2>
+    <div class="card-grid">
+      <a class="card" href="/angular-sdk/basic">
+        <span class="tag">display</span>
+        <h3>Basic display</h3>
+        <p>One explicit-id <code>&lt;ezoic-ad&gt;</code> display placement dropped between two paragraphs.</p>
+        <span class="card-cta">Open the example &rarr;</span>
+      </a>
+      <a class="card" href="/angular-sdk/zero-config">
+        <span class="tag">zero-config</span>
+        <h3>Zero-config placement</h3>
+        <p>A semantic <code>location</code> name resolved to a reserved 900-range placeholder id at runtime.</p>
+        <span class="card-cta">Open the example &rarr;</span>
+      </a>
+      <a class="card" href="/angular-sdk/spa">
+        <span class="tag">routing</span>
+        <h3>SPA navigation</h3>
+        <p>Two routed pages whose placements refresh on navigation via <code>withRouterRefresh()</code>.</p>
+        <span class="card-cta">Open the example &rarr;</span>
+      </a>
+      <a class="card" href="/angular-sdk/dynamic">
+        <span class="tag">dynamic</span>
+        <h3>Dynamic content</h3>
+        <p>Placements that mount after initial load when the reader loads more content.</p>
+        <span class="card-cta">Open the example &rarr;</span>
+      </a>
+      <a class="card" href="/angular-sdk/rewarded">
+        <span class="tag">rewarded</span>
+        <h3>Rewarded ads</h3>
+        <p>The imperative <code>EzoicRewardedService</code> driving request, show and requestAndShow.</p>
+        <span class="card-cta">Open the example &rarr;</span>
+      </a>
+      <a class="card" href="/angular-sdk/video">
+        <span class="tag">video</span>
+        <h3>Video</h3>
+        <p>An Open Video inline embed and an Ezoic video placeholder.</p>
+        <span class="card-cta">Open the example &rarr;</span>
+      </a>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>Ezoic Examples</span>
+    <nav>
+      <a href="https://docs.ezoic.com">docs.ezoic.com</a>
+      <a href="https://www.ezoic.com">www.ezoic.com</a>
+    </nav>
+  </div>
+</footer>
+</body>
+</html>
