@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Web Game SDK — cross-origin HTML5 game demo | Ezoic Examples</title>
 <meta name="description" content="A cross-origin HTML5 game monetized through the parent page's Ezoic integration via the EzGameSDK postMessage bridge.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Reddit+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="/assets/site.css">
 <script data-cfasync="false" src="https://cmp.gatekeeperconsent.com/min.js"></script>
 <script data-cfasync="false" src="https://the.gatekeeperconsent.com/cmp.min.js"></script>
@@ -23,11 +26,12 @@
 <body>
 <header class="site-header">
   <div class="wrap">
-    <a class="brand" href="/">Ezoic<span>Examples</span></a>
+    <a class="brand" href="/">Ezoic <span>Examples</span></a>
     <nav class="site-nav">
       <a href="/idless/">Id-less showAds</a>
       <a href="/game-sdk/">Web Game SDK</a>
       <a href="https://docs.ezoic.com">Docs</a>
+      <a href="https://github.com/ezoic/examples.ezoic.com">GitHub</a>
     </nav>
   </div>
 </header>
@@ -35,7 +39,7 @@
 <main class="wrap">
   <section class="hero">
     <p class="eyebrow">Web Game SDK</p>
-    <h1>Cross-origin game, monetized by the parent page</h1>
+    <h1>Cross-origin game, monetized by the <span class="accent">parent page</span></h1>
     <p>An HTML5 game runs inside a cross-origin iframe and calls
     <code>window.EzGameSDK</code>. The SDK talks to the parent page over a
     <code>postMessage</code> bridge inside <code>sa.min.js</code>; the parent — the
@@ -54,6 +58,7 @@
     ads, and banners — every call is proxied to the parent and answered over the bridge.</div>
     <div class="kv">The game's own on-screen log shows the SDK side (responses and events arriving
     inside the iframe). The panel below shows the parent side.</div>
+    <p class="source-row"><a class="source-link" href="https://github.com/ezoic/examples.ezoic.com/blob/master/site/game-sdk/index.html">View source on GitHub &rarr;</a></p>
   </section>
 
   <section class="panel">

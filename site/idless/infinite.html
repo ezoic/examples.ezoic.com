@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Infinite — exhaustion and recycling | Ezoic Examples</title>
 <meta name="description" content="Infinite scroll id-less showAds: exhausts every mapped id, then destroys the oldest placeholder and recycles its id.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Reddit+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="/assets/site.css">
 <script data-cfasync="false" src="https://cmp.gatekeeperconsent.com/min.js"></script>
 <script data-cfasync="false" src="https://the.gatekeeperconsent.com/cmp.min.js"></script>
@@ -17,11 +20,12 @@
 <body class="has-debug-bar">
 <header class="site-header">
   <div class="wrap">
-    <a class="brand" href="/">Ezoic<span>Examples</span></a>
+    <a class="brand" href="/">Ezoic <span>Examples</span></a>
     <nav class="site-nav">
       <a href="/idless/">Id-less showAds</a>
       <a href="/game-sdk/">Web Game SDK</a>
       <a href="https://docs.ezoic.com">Docs</a>
+      <a href="https://github.com/ezoic/examples.ezoic.com">GitHub</a>
     </nav>
   </div>
 </header>
@@ -30,8 +34,10 @@
   <div class="explainer">
     <h2>What this demonstrates</h2>
     <div class="explainer-body">Scrolling near the bottom appends a batch of four paragraphs
-    followed by one id-less <code>showAds</code> call. Batches keep claiming generated ids until
-    every mapped id on the page is in use; from then on the resolver destroys the oldest id-less
+    followed by one id-less <code>showAds</code> call that passes the batch's last paragraph as its
+    <code>anchor</code>, so the ad renders inside the flow right after the batch it belongs to
+    instead of piling up at the end of the content. Batches keep claiming generated ids until every
+    mapped id on the page is in use; from then on the resolver destroys the oldest id-less
     placeholder and reuses its id rather than ever failing a call. Add <code>?burst=120</code> to
     the URL to run 120 batches automatically. <code>window.__idlessInfinite</code> exposes the
     counters for automation.</div>
@@ -47,19 +53,23 @@
   ezstandalone.cmd = ezstandalone.cmd || [];
 &lt;/script&gt;
 
-&lt;!-- Per appended batch: one id-less call, method name split --&gt;
+&lt;!-- Per appended batch: one id-less call anchored to the batch's last paragraph --&gt;
 &lt;script&gt;
   window.ezstandalone.cmd.push(function () {
-    window.ezstandalone["show" + "Ads"]({sizes: "300x250"});
+    window.ezstandalone["show" + "Ads"]({sizes: "300x250", anchor: lastParagraph});
   });
 &lt;/script&gt;</code></pre>
+
+  <p class="source-row"><a class="source-link" href="https://github.com/ezoic/examples.ezoic.com/blob/master/site/idless/infinite.html">View source on GitHub &rarr;</a></p>
 
   <article id="article">
     <h1>Infinite scroll — id exhaustion and recycling</h1>
     <p>Scrolling near the bottom appends a batch of four paragraphs followed by one id-less
-    showAds call. Batches keep claiming generated ids until every mapped id on the page is in
-    use; from then on the resolver must destroy the oldest id-less placeholder and reuse its id
-    rather than ever failing a call.</p>
+    showAds call. Each call passes the batch's last paragraph as its anchor, so the ad renders
+    inside the flow directly after the batch it belongs to instead of piling up at the end of the
+    content. Batches keep claiming generated ids until every mapped id on the page is in use; from
+    then on the resolver must destroy the oldest id-less placeholder and reuse its id rather than
+    ever failing a call.</p>
     <p>Add <strong>?burst=120</strong> to the URL to run 120 batches automatically without
     scrolling. Progress and every destroy/reuse event appear in the status bar below;
     <code>window.__idlessInfinite</code> exposes the counters for automation.</p>
@@ -82,9 +92,10 @@
     }
 
     // Split-name indexing (window.ezstandalone["show" + "Ads"]) is what keeps
-    // the inline-script scanner from matching this driver script; batches run
-    // from timeouts so there is no script anchor and each ad appends at the
-    // end of the content — tracking the newest batch.
+    // the inline-script scanner from matching this driver script. Each batch
+    // passes its last paragraph as descriptor.anchor, so the resolver inserts
+    // the placeholder immediately after that element and the ad lands inside
+    // the flow of the batch it belongs to instead of at the end of the content.
     function callAd(desc) {
         window.ezstandalone["show" + "Ads"](desc);
         return desc;
@@ -92,7 +103,7 @@
 
     var FILLER = [
         "Infinite scroll filler paragraph. Fresh content keeps arriving as the reader approaches the bottom of the page, exactly like a feed or endless article list would behave in production.",
-        "Each appended batch is followed by one id-less call carrying only sizes; with no script anchor the resolver appends at the end of the content, which tracks the newest batch.",
+        "Each appended batch is followed by one id-less call that passes the batch's last paragraph as its anchor, so the resolver inserts the ad inside the flow right after that batch instead of at the end of the content.",
         "As batches accumulate the generated ids drain one by one until every mapped id on the page is in use and the resolver has to start recycling.",
         "Once nothing is free the resolver destroys the oldest id-less placeholder on the page, releases its id, and reuses it for the newest placement instead of failing the call."
     ];
@@ -147,13 +158,17 @@
 
     function addBatch(done) {
         state.batches++;
+        var lastP = null;
         for (var i = 0; i < 4; i++) {
             var p = document.createElement("p");
             p.appendChild(document.createTextNode("[batch " + state.batches + "." + (i + 1) + "] " + FILLER[i % FILLER.length]));
             article.appendChild(p);
+            lastP = p;
         }
+        // Anchor the placement on the batch's last paragraph so the resolver
+        // inserts the ad right after it, inside the flow of this batch.
         window.ezstandalone.cmd.push(function () {
-            callAd({sizes: "300x250"});
+            callAd({sizes: "300x250", anchor: lastP});
         });
         setTimeout(function () {
             snapshot();
