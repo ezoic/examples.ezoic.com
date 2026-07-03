@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dynamic content | Ezoic Examples — Vue SDK</title>
+<meta name="description" content="@ezoic/vue-sdk incremental showAds for content added after the initial pageview (infinite scroll, load more).">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Reddit+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+.vue-demo-frame { display: block; width: 100%; height: 900px; border: 1px solid var(--hairline); border-radius: var(--radius); background: #fff; }
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/">Ezoic <span>Examples</span></a>
+    <nav class="site-nav">
+      <a href="/idless/">Id-less showAds</a>
+      <a href="/placeholders/">Placement IDs</a>
+      <a href="/game-sdk/">Web Game SDK</a>
+      <a href="/vue-sdk/">Vue SDK</a>
+      <a href="https://docs.ezoic.com">Docs</a>
+      <a href="https://github.com/ezoic/examples.ezoic.com">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap prose article">
+  <section class="hero">
+    <p class="eyebrow">Vue SDK</p>
+    <h1>Incremental <span class="accent">showAds</span> for new content</h1>
+    <p>Content appended within the <em>same</em> pageview — infinite scroll, a "load more" button, a
+    modal — should request just the new ids, not re-scan the whole page or start a new pageview.</p>
+  </section>
+
+  <div class="explainer">
+    <h2>What this demonstrates</h2>
+    <div class="explainer-body">Mounting more <code>&lt;EzoicAd&gt;</code> components does this
+    automatically — each one still batches into the SDK's per-tick queue, it just becomes a
+    <code>displayMore</code> call (rather than the first pageview's <code>showAds</code>) once the
+    ad bundle has already made its first request. To do it imperatively — for divs you render
+    yourself — call <code>displayMore</code> from <code>useEzoic()</code> directly.</div>
+  </div>
+
+  <p class="source-row"><a class="source-link" href="https://github.com/ezoic/examples.ezoic.com/blob/master/site/vue-sdk/dynamic.html">View source on GitHub &rarr;</a></p>
+  <p class="source-row">SDK docs: <a class="source-link" href="https://github.com/ezoic/ezoic-vue-sdk#infinite-scroll-and-dynamic-content">README — Infinite scroll and dynamic content</a></p>
+
+  <div class="snippet-label">Component usage — just mount more &lt;EzoicAd&gt;</div>
+  <pre class="snippet"><code>&lt;template&gt;
+  &lt;button @click="addUnit"&gt;Load more&lt;/button&gt;
+  &lt;EzoicAd v-for="u in units" :key="u.id" :id="u.id" :sizes="u.sizes" /&gt;
+&lt;/template&gt;</code></pre>
+
+  <div class="snippet-label">Imperative — divs you render yourself</div>
+  <pre class="snippet"><code>const ezoic = useEzoic();
+// After appending divs for placeholders 210 and 211:
+ezoic.displayMore(
+  { id: 210, required: true, sizes: ['300x250'] },
+  { id: 211, required: true, sizes: ['300x250'] },
+);</code></pre>
+
+  <div class="explainer">
+    <h2>Live demo</h2>
+    <div class="explainer-body">The panel below embeds the SDK's own demo app (built from
+    <code>@ezoic/vue-sdk</code> v1.0.0) — use its <strong>"Dynamic content — incremental
+    showAds"</strong> panel and click <em>Add ad unit</em> repeatedly; each click mounts one more
+    <code>&lt;EzoicAd location="bottom_of_page"&gt;</code>. <code>examples.ezoic.com</code>'s root
+    domain is not lite-active, so ad requests will not fill here.
+    <a href="/vue-sdk/demo.html">Open the full demo in a new tab &rarr;</a></div>
+  </div>
+  <div class="frame-holder">
+    <iframe class="vue-demo-frame" src="/vue-sdk/demo.html" title="@ezoic/vue-sdk live demo" loading="lazy"></iframe>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>Ezoic Examples</span>
+    <nav>
+      <a href="https://docs.ezoic.com">docs.ezoic.com</a>
+      <a href="https://www.ezoic.com">www.ezoic.com</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="/assets/site.js"></script>
+</body>
+</html>

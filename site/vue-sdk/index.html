@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vue SDK examples — @ezoic/vue-sdk live demos | Ezoic Examples</title>
+<meta name="description" content="Live demos of @ezoic/vue-sdk, the official Ezoic ads SDK for Vue 3: display placements, zero-config locations, SPA routing, dynamic content, rewarded ads, and video.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Reddit+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/">Ezoic <span>Examples</span></a>
+    <nav class="site-nav">
+      <a href="/idless/">Id-less showAds</a>
+      <a href="/placeholders/">Placement IDs</a>
+      <a href="/game-sdk/">Web Game SDK</a>
+      <a href="/vue-sdk/">Vue SDK</a>
+      <a href="https://docs.ezoic.com">Docs</a>
+      <a href="https://github.com/ezoic/examples.ezoic.com">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <p class="eyebrow">Vue SDK</p>
+    <h1><code>@ezoic/vue-sdk</code> <span class="accent">live demos</span></h1>
+    <p>The official Ezoic ads SDK for Vue 3 — <code>npm install @ezoic/vue-sdk</code>. Every page
+    below embeds the same live demo app, built from the SDK's own <code>examples/</code> app, and
+    points it at the panel for one feature: display placements, zero-config locations, SPA routing,
+    dynamic content, rewarded ads, and video.</p>
+    <p class="source-row"><a class="source-link" href="https://github.com/ezoic/examples.ezoic.com/blob/master/site/vue-sdk/index.html">View source on GitHub &rarr;</a></p>
+    <p class="source-row">SDK source: <a class="source-link" href="https://github.com/ezoic/ezoic-vue-sdk">github.com/ezoic/ezoic-vue-sdk</a></p>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title">Examples</h2>
+    <ul class="example-list">
+      <li><a class="row" href="/vue-sdk/basic"><span class="name">basic</span><span class="desc">numeric-id placement with explicit <code>sizes</code> + <code>required</code></span></a></li>
+      <li><a class="row" href="/vue-sdk/zero-config"><span class="name">zero-config</span><span class="desc"><code>&lt;EzoicAd location="..."&gt;</code>, no dashboard id at all</span></a></li>
+      <li><a class="row" href="/vue-sdk/spa"><span class="name">spa</span><span class="desc">simulated single-page-app navigation via <code>useEzoicPageView</code></span></a></li>
+      <li><a class="row" href="/vue-sdk/dynamic"><span class="name">dynamic</span><span class="desc">mounting new placements at runtime (infinite scroll / load more)</span></a></li>
+      <li><a class="row" href="/vue-sdk/rewarded"><span class="name">rewarded</span><span class="desc"><code>useEzoicRewarded()</code> — request / show / content locker</span></a></li>
+      <li><a class="row" href="/vue-sdk/video"><span class="name">video</span><span class="desc"><code>&lt;EzoicVideo&gt;</code> ad-bundle placeholder and <code>&lt;EzoicVideoEmbed&gt;</code> Open Video embed</span></a></li>
+      <li><a class="row" href="/vue-sdk/demo.html"><span class="name">demo.html</span><span class="desc">the full demo app on its own, unwrapped (opens standalone)</span></a></li>
+    </ul>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>Ezoic Examples</span>
+    <nav>
+      <a href="https://docs.ezoic.com">docs.ezoic.com</a>
+      <a href="https://www.ezoic.com">www.ezoic.com</a>
+    </nav>
+  </div>
+</footer>
+</body>
+</html>
