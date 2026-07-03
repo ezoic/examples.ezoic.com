@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Basic display — sizes + required | Ezoic Examples — Vue SDK</title>
+<meta name="description" content="@ezoic/vue-sdk numeric-id display placement: <EzoicAd :id> with explicit sizes and required, the canonical usage pairing.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Reddit+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+.vue-demo-frame { display: block; width: 100%; height: 900px; border: 1px solid var(--hairline); border-radius: var(--radius); background: #fff; }
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/">Ezoic <span>Examples</span></a>
+    <nav class="site-nav">
+      <a href="/idless/">Id-less showAds</a>
+      <a href="/placeholders/">Placement IDs</a>
+      <a href="/game-sdk/">Web Game SDK</a>
+      <a href="/vue-sdk/">Vue SDK</a>
+      <a href="https://docs.ezoic.com">Docs</a>
+      <a href="https://github.com/ezoic/examples.ezoic.com">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap prose article">
+  <section class="hero">
+    <p class="eyebrow">Vue SDK</p>
+    <h1>Numeric-id display with <span class="accent">sizes + required</span></h1>
+    <p><code>&lt;EzoicAd&gt;</code> renders a bare <code>&lt;div id="ezoic-pub-ad-placeholder-101"&gt;</code>
+    and queues it onto <code>ezstandalone.showAds(...)</code>. Passing <code>sizes</code> and
+    <code>:required="true"</code> together is the canonical pairing shown in every SDK
+    README/quickstart example, even though a numeric dashboard <code>id</code> can also be sized
+    from the Ezoic dashboard.</p>
+  </section>
+
+  <div class="explainer">
+    <h2>What this demonstrates</h2>
+    <div class="explainer-body">Every <code>&lt;EzoicAd&gt;</code> that mounts in the same tick is
+    batched into <strong>one</strong> <code>showAds(...)</code> call carrying all their ids (the ad
+    bundle adds its own debounce on top). Unmounting an <code>&lt;EzoicAd&gt;</code> calls
+    <code>destroyPlaceholders(id)</code>. The placeholder div itself carries no styling — a
+    <code>class</code>/<code>style</code> on <code>&lt;EzoicAd&gt;</code> is intentionally not
+    forwarded to it.</div>
+  </div>
+
+  <p class="source-row"><a class="source-link" href="https://github.com/ezoic/examples.ezoic.com/blob/master/site/vue-sdk/basic.html">View source on GitHub &rarr;</a></p>
+  <p class="source-row">SDK docs: <a class="source-link" href="https://github.com/ezoic/ezoic-vue-sdk#display-ads">README — Display ads</a></p>
+
+  <div class="snippet-label">Component usage</div>
+  <pre class="snippet"><code>&lt;script setup lang="ts"&gt;
+import { EzoicAd } from '@ezoic/vue-sdk';
+&lt;/script&gt;
+
+&lt;template&gt;
+  &lt;EzoicAd :id="101" :sizes="['300x250', '336x280']" :required="true" /&gt;
+&lt;/template&gt;</code></pre>
+
+  <div class="explainer">
+    <h2>Live demo</h2>
+    <div class="explainer-body">The panel below embeds the SDK's own demo app (built from
+    <code>@ezoic/vue-sdk</code> v1.0.0) — look at its <strong>"Numeric-id placement"</strong> panel
+    for this scenario. <code>examples.ezoic.com</code>'s root domain is not lite-active, so the ad
+    request will not fill here — check the placeholder div and ids, not the fill.
+    <a href="/vue-sdk/demo.html">Open the full demo in a new tab &rarr;</a></div>
+  </div>
+  <div class="frame-holder">
+    <iframe class="vue-demo-frame" src="/vue-sdk/demo.html" title="@ezoic/vue-sdk live demo" loading="lazy"></iframe>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>Ezoic Examples</span>
+    <nav>
+      <a href="https://docs.ezoic.com">docs.ezoic.com</a>
+      <a href="https://www.ezoic.com">www.ezoic.com</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="/assets/site.js"></script>
+</body>
+</html>
