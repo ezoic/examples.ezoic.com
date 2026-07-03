@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Video | Ezoic Examples — Vue SDK</title>
+<meta name="description" content="@ezoic/vue-sdk video: EzoicVideo ad-bundle placeholders and EzoicVideoEmbed self-contained Open Video inline embeds.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Reddit+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+.vue-demo-frame { display: block; width: 100%; height: 900px; border: 1px solid var(--hairline); border-radius: var(--radius); background: #fff; }
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/">Ezoic <span>Examples</span></a>
+    <nav class="site-nav">
+      <a href="/idless/">Id-less showAds</a>
+      <a href="/placeholders/">Placement IDs</a>
+      <a href="/game-sdk/">Web Game SDK</a>
+      <a href="/vue-sdk/">Vue SDK</a>
+      <a href="https://docs.ezoic.com">Docs</a>
+      <a href="https://github.com/ezoic/examples.ezoic.com">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap prose article">
+  <section class="hero">
+    <p class="eyebrow">Vue SDK</p>
+    <h1><span class="accent">Video</span> placeholders and embeds</h1>
+    <p>The SDK ships two independent video paths: Ezoic's own ad-bundle video placeholders, and
+    inline embeds from Ezoic's Open Video platform.</p>
+  </section>
+
+  <div class="explainer">
+    <h2>What this demonstrates</h2>
+    <div class="explainer-body"><code>&lt;EzoicVideo&gt;</code> renders an Ezoic video-ad
+    placeholder driven by the ad bundle — it requires the plugin, uses a publisher-chosen div id
+    (a numeric string; the ad bundle silently drops non-numeric video ids), and its one call both
+    registers and loads the ad code. <code>&lt;EzoicVideoEmbed&gt;</code> is self-contained: it
+    injects the Open Video script itself and needs no plugin, so it can be dropped in anywhere.
+    Both tear their placeholder down automatically on unmount.</div>
+  </div>
+
+  <p class="source-row"><a class="source-link" href="https://github.com/ezoic/examples.ezoic.com/blob/master/site/vue-sdk/video.html">View source on GitHub &rarr;</a></p>
+  <p class="source-row">SDK docs: <a class="source-link" href="https://github.com/ezoic/ezoic-vue-sdk#video">README — Video</a></p>
+
+  <div class="snippet-label">Component usage</div>
+  <pre class="snippet"><code>&lt;script setup lang="ts"&gt;
+import { EzoicVideo, EzoicVideoEmbed } from '@ezoic/vue-sdk';
+&lt;/script&gt;
+
+&lt;template&gt;
+  &lt;!-- Ezoic ad-bundle video placeholder. Requires the plugin. --&gt;
+  &lt;div class="video-slot"&gt;
+    &lt;EzoicVideo div-id="900001" /&gt;
+  &lt;/div&gt;
+
+  &lt;!-- Self-contained Open Video inline embed. No plugin required. --&gt;
+  &lt;EzoicVideoEmbed video-id="EXAMPLE_VIDEO_ID" :autoplay="false" /&gt;
+&lt;/template&gt;</code></pre>
+
+  <div class="explainer">
+    <h2>Live demo</h2>
+    <div class="explainer-body">The panel below embeds the SDK's own demo app (built from
+    <code>@ezoic/vue-sdk</code> v1.0.0) — look at its <strong>"Video"</strong> panel. The
+    <code>EzoicVideoEmbed</code> example uses a placeholder video id, so it will not resolve to a
+    real video anywhere; <code>examples.ezoic.com</code>'s root domain is also not lite-active, so
+    the <code>EzoicVideo</code> ad-bundle placeholder will not fill. Check the placeholder div and
+    the embed container, not the fill. <a href="/vue-sdk/demo.html">Open the full demo in a new
+    tab &rarr;</a></div>
+  </div>
+  <div class="frame-holder">
+    <iframe class="vue-demo-frame" src="/vue-sdk/demo.html" title="@ezoic/vue-sdk live demo" loading="lazy"></iframe>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>Ezoic Examples</span>
+    <nav>
+      <a href="https://docs.ezoic.com">docs.ezoic.com</a>
+      <a href="https://www.ezoic.com">www.ezoic.com</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="/assets/site.js"></script>
+</body>
+</html>

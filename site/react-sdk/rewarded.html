@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rewarded ads — useEzoicRewarded | Ezoic Examples — React SDK</title>
+<meta name="description" content="@ezoic/react-sdk rewarded ads: useEzoicRewarded() promise-based wrappers for request, show, requestAndShow, requestWithOverlay, and contentLocker.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Reddit+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+.react-demo-frame { display: block; width: 100%; height: 900px; border: 1px solid var(--hairline); border-radius: var(--radius); background: #fff; }
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/">Ezoic <span>Examples</span></a>
+    <nav class="site-nav">
+      <a href="/idless/">Id-less showAds</a>
+      <a href="/placeholders/">Placement IDs</a>
+      <a href="/game-sdk/">Web Game SDK</a>
+      <a href="/angular-sdk/">Angular SDK</a>
+      <a href="/vue-sdk/">Vue SDK</a>
+      <a href="/react-sdk/">React SDK</a>
+      <a href="https://docs.ezoic.com">Docs</a>
+      <a href="https://github.com/ezoic/examples.ezoic.com">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap prose article">
+  <section class="hero">
+    <p class="eyebrow">React SDK</p>
+    <h1>Rewarded ads with <span class="accent">useEzoicRewarded</span></h1>
+    <p><code>useEzoicRewarded()</code> wraps <code>window.ezRewardedAds</code> with promise-based
+    methods instead of raw callbacks, so a "watch a video for a reward" button is a normal
+    <code>async</code> function.</p>
+  </section>
+
+  <div class="explainer">
+    <h2>What this demonstrates</h2>
+    <div class="explainer-body">The hook exposes <code>request</code>, <code>show</code>,
+    <code>requestAndShow</code>, <code>requestWithOverlay</code>, and <code>contentLocker</code>, each
+    resolving with a typed outcome object (<code>status</code>, <code>reward</code>, <code>msg</code>).
+    It requires a <code>loaderUrl</code> pointing at the publisher's site-specific rewarded-ads loader
+    script — the demo below leaves this blank by default (no publisher loader exists for
+    <code>examples.ezoic.com</code>), so requests correctly stay pending until a real loader URL is
+    supplied in the input field.</div>
+  </div>
+
+  <p class="source-row"><a class="source-link" href="https://github.com/ezoic/examples.ezoic.com/blob/master/site/react-sdk/rewarded.html">View source on GitHub &rarr;</a></p>
+  <p class="source-row">SDK docs: <a class="source-link" href="https://github.com/ezoic/ezoic-react-sdk#rewarded-ads">README — Rewarded ads</a></p>
+
+  <div class="snippet-label">Hook usage</div>
+  <pre class="snippet"><code>import { useEzoicRewarded } from '@ezoic/react-sdk';
+
+function RewardButton() {
+  const { requestAndShow } = useEzoicRewarded({
+    loaderUrl: 'https://example.com/porpoiseant/ezadloadrewarded.js',
+  });
+
+  async function onClick() {
+    const result = await requestAndShow({ placementId: 'unlock-article' });
+    if (result.status === 'granted') {
+      // unlock the reward
+    }
+  }
+
+  return &lt;button onClick={onClick}&gt;Watch ad for reward&lt;/button&gt;;
+}</code></pre>
+
+  <div class="explainer">
+    <h2>Live demo</h2>
+    <div class="explainer-body">The panel below embeds the SDK's own demo app (built from
+    <code>@ezoic/react-sdk</code> v1.0.0) — use its <strong>"Rewarded ads"</strong> panel; provide your
+    own loader URL to see a real request/show cycle, or leave it blank to see the pending state.
+    <a href="/react-sdk/demo.html">Open the full demo in a new tab &rarr;</a></div>
+  </div>
+  <div class="frame-holder">
+    <iframe class="react-demo-frame" src="/react-sdk/demo.html" title="@ezoic/react-sdk live demo" loading="lazy"></iframe>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>Ezoic Examples</span>
+    <nav>
+      <a href="https://docs.ezoic.com">docs.ezoic.com</a>
+      <a href="https://www.ezoic.com">www.ezoic.com</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="/assets/site.js"></script>
+</body>
+</html>
