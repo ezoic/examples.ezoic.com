@@ -35,7 +35,8 @@ site/
 Pages are served as-is from `site/`. There is no build step, no npm, and no framework.
 
 Internal links between pages are extensionless (for example `/idless/basic` and
-`/game-sdk/`). The CDN rewrites `/x` to `/x.html` and `/dir/` to `/dir/index.html`.
+`/game-sdk/`). On the live site `/x` resolves to `/x.html` and `/dir/` to
+`/dir/index.html`.
 
 ## Adding a new example page
 
@@ -59,6 +60,6 @@ Serve the `site/` directory with any static file server, for example:
 cd site && python3 -m http.server 8000
 ```
 
-Then open `http://localhost:8000/`. Note that a plain static server does not apply the
-CDN's extensionless rewrites, so open pages with their `.html` extension locally
+Then open `http://localhost:8000/`. Note that a plain static server does not resolve
+extensionless URLs, so open pages with their `.html` extension locally
 (for example `http://localhost:8000/idless/basic.html`).
