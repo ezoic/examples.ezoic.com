@@ -56,18 +56,18 @@
 &lt;/script&gt;
 
 &lt;!-- Initial in-content placement --&gt;
-&lt;div id="ezoic-pub-ad-placeholder-153"&gt;&lt;/div&gt;
+&lt;div id="ezoic-pub-ad-placeholder-920"&gt;&lt;/div&gt;
 &lt;script&gt;
   ezstandalone.cmd.push(function () {
-    ezstandalone.showAds(153);
+    ezstandalone.showAds(920);
   });
 &lt;/script&gt;
 
 &lt;!-- Each appended batch adds the next unused placement id and activates it --&gt;
-&lt;div id="ezoic-pub-ad-placeholder-154"&gt;&lt;/div&gt;
+&lt;div id="ezoic-pub-ad-placeholder-921"&gt;&lt;/div&gt;
 &lt;script&gt;
   ezstandalone.cmd.push(function () {
-    ezstandalone.showAds(154);
+    ezstandalone.showAds(921);
   });
 &lt;/script&gt;</code></pre>
 
@@ -77,15 +77,15 @@
   <article id="article">
     <h1>Infinite scroll with unique ids</h1>
     <p>This feed uses a fixed pool of in-content placements created in the Ezoic dashboard. The
-    initial article carries placement 153. As you scroll toward the bottom, each new batch of content
-    is followed by the next unused id from the pool [154, 155, 156, 157, 158, 159, 160], activated
+    initial article carries placement 920. As you scroll toward the bottom, each new batch of content
+    is followed by the next unused id from the pool [921, 922, 923, 924, 925, 926, 927], activated
     with its own <code>showAds(id)</code> call.</p>
     <p>No id is ever reused: the docs warn that duplicate ids on a page cause unpredictable behavior,
     and reusing an id requires destroying the original placeholder first. When the pool is exhausted
     this page stops adding ad divs and says so in the status bar. Add <strong>?burst=7</strong> to the
     URL to append batches automatically.</p>
 
-    <div id="ezoic-pub-ad-placeholder-153"></div>
+    <div id="ezoic-pub-ad-placeholder-920"></div>
   </article>
 </main>
 
@@ -99,7 +99,7 @@
 
     // Fixed pool of in-content placements created in the dashboard. Ids are
     // handed out in order and never reused.
-    var POOL = [154, 155, 156, 157, 158, 159, 160];
+    var POOL = [921, 922, 923, 924, 925, 926, 927];
     var article = document.getElementById("article");
     var statusBox = document.getElementById("status");
     var summary = document.createElement("div");
@@ -131,9 +131,9 @@
 
     // Initial in-content placement (already in the markup above).
     ezstandalone.cmd.push(function () {
-        ezstandalone.showAds(153);
+        ezstandalone.showAds(920);
     });
-    status("initial article: showAds(153)");
+    status("initial article: showAds(920)");
     updateSummary();
 
     function addBatch(done) {

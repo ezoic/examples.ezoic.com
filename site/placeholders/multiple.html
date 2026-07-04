@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Multiple — three placements, one batched showAds | Ezoic Examples</title>
-<meta name="description" content="Three publisher-owned placeholder divs (148, 149, 150) activated by a single batched ezstandalone.showAds() call.">
+<meta name="description" content="Three publisher-owned placeholder divs (915, 916, 917) activated by a single batched ezstandalone.showAds() call.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Reddit+Mono:wght@400;500&display=swap">
@@ -35,8 +35,8 @@
   <div class="explainer">
     <h2>What this demonstrates</h2>
     <div class="explainer-body">Three publisher-owned placeholder divs at different positions in one
-    article — 148 near the top, 149 mid-article, 150 at the bottom — activated by a single batched
-    <code>ezstandalone.showAds(148, 149, 150)</code> call after the last div. The docs recommend
+    article — 915 near the top, 916 mid-article, 917 at the bottom — activated by a single batched
+    <code>ezstandalone.showAds(915, 916, 917)</code> call after the last div. The docs recommend
     passing every placement id on a page into one <code>showAds()</code> call so the auction runs in
     one server request instead of several. Calling <code>showAds()</code> with no arguments activates
     every placeholder div present on the page instead of a named subset.</div>
@@ -53,14 +53,14 @@
 &lt;/script&gt;
 
 &lt;!-- Body: three publisher-owned placeholder divs at their positions --&gt;
-&lt;div id="ezoic-pub-ad-placeholder-148"&gt;&lt;/div&gt;
-&lt;div id="ezoic-pub-ad-placeholder-149"&gt;&lt;/div&gt;
-&lt;div id="ezoic-pub-ad-placeholder-150"&gt;&lt;/div&gt;
+&lt;div id="ezoic-pub-ad-placeholder-915"&gt;&lt;/div&gt;
+&lt;div id="ezoic-pub-ad-placeholder-916"&gt;&lt;/div&gt;
+&lt;div id="ezoic-pub-ad-placeholder-917"&gt;&lt;/div&gt;
 
 &lt;!-- One batched activation after the last div --&gt;
 &lt;script&gt;
   ezstandalone.cmd.push(function () {
-    ezstandalone.showAds(148, 149, 150);
+    ezstandalone.showAds(915, 916, 917);
   });
 &lt;/script&gt;</code></pre>
 
@@ -72,7 +72,7 @@
     <p>This article carries three placement ids created in the Ezoic dashboard, each with its own
     placeholder div owned by the page. The first sits near the top, directly below this paragraph.</p>
 
-    <div id="ezoic-pub-ad-placeholder-148"></div>
+    <div id="ezoic-pub-ad-placeholder-915"></div>
 
     <p>The remaining divs live further down the article. Their positions in the markup are exactly
     where their ads render — nothing about the layout is inferred, because every placement is
@@ -84,7 +84,7 @@
     be targeted programmatically later with <code>refreshAds</code> or
     <code>destroyPlaceholders</code>.</p>
 
-    <div id="ezoic-pub-ad-placeholder-149"></div>
+    <div id="ezoic-pub-ad-placeholder-916"></div>
 
     <p>Content continues after the mid-article placement. Because a single batched call activates
     all three ids together, the page issues one auction request instead of three separate ones.</p>
@@ -93,11 +93,11 @@
     <p>The final paragraph closes out the body. The bottom placement's div follows immediately
     below, and the one activation call runs after it.</p>
 
-    <div id="ezoic-pub-ad-placeholder-150"></div>
+    <div id="ezoic-pub-ad-placeholder-917"></div>
 
     <script>
         ezstandalone.cmd.push(function () {
-            ezstandalone.showAds(148, 149, 150);
+            ezstandalone.showAds(915, 916, 917);
         });
     </script>
   </article>

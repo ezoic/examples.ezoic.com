@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Dynamic — show, destroy, re-show placements | Ezoic Examples</title>
-<meta name="description" content="Add placeholder divs (151, 152) with showAds, tear them down with destroyPlaceholders before removing the DOM, then re-show them.">
+<meta name="description" content="Add placeholder divs (918, 919) with showAds, tear them down with destroyPlaceholders before removing the DOM, then re-show them.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Reddit+Mono:wght@400;500&display=swap">
@@ -39,7 +39,7 @@
     When that content is removed, <code>ezstandalone.destroyPlaceholders(ids)</code> must run
     <strong>before</strong> the divs leave the DOM so the slots are torn down cleanly. When the same
     content becomes visible again, <code>showAds(ids)</code> re-activates it. The buttons below add a
-    comments section carrying placements 151 and 152, tear it down, and re-add it; the status bar
+    comments section carrying placements 918 and 919, tear it down, and re-add it; the status bar
     logs each call.</div>
   </div>
 
@@ -56,21 +56,21 @@
 &lt;!-- After appending the divs: show the new placements --&gt;
 &lt;script&gt;
   ezstandalone.cmd.push(function () {
-    ezstandalone.showAds(151, 152);
+    ezstandalone.showAds(918, 919);
   });
 &lt;/script&gt;
 
 &lt;!-- Destroy them BEFORE removing their divs from the DOM --&gt;
 &lt;script&gt;
   ezstandalone.cmd.push(function () {
-    ezstandalone.destroyPlaceholders(151, 152);
+    ezstandalone.destroyPlaceholders(918, 919);
   });
 &lt;/script&gt;
 
 &lt;!-- Re-show after re-appending the divs --&gt;
 &lt;script&gt;
   ezstandalone.cmd.push(function () {
-    ezstandalone.showAds(151, 152);
+    ezstandalone.showAds(918, 919);
   });
 &lt;/script&gt;</code></pre>
 
@@ -82,7 +82,7 @@
     <p>This article starts with no comments. The two placements below live inside a comments section
     that only exists after you load it — a common pattern for lazy-loaded comment widgets, tabs, and
     expandable panels.</p>
-    <p>Use the buttons to add the comments section (which activates placements 151 and 152), hide it
+    <p>Use the buttons to add the comments section (which activates placements 918 and 919), hide it
     (which destroys them before their divs are removed), and load it again (which re-activates the
     same ids). Every call is logged in the status bar at the bottom of the page.</p>
 
@@ -111,7 +111,7 @@
     }
 
     // Builds the comments section with two publisher-owned placeholder divs
-    // (151, 152). The ids come from placements created in the Ezoic dashboard.
+    // (918, 919). The ids come from placements created in the Ezoic dashboard.
     function buildComments() {
         var section = document.createElement("section");
         section.id = "comments";
@@ -125,7 +125,7 @@
         section.appendChild(c1);
 
         var d1 = document.createElement("div");
-        d1.id = "ezoic-pub-ad-placeholder-151";
+        d1.id = "ezoic-pub-ad-placeholder-918";
         section.appendChild(d1);
 
         var c2 = document.createElement("p");
@@ -133,7 +133,7 @@
         section.appendChild(c2);
 
         var d2 = document.createElement("div");
-        d2.id = "ezoic-pub-ad-placeholder-152";
+        d2.id = "ezoic-pub-ad-placeholder-919";
         section.appendChild(d2);
 
         mount.appendChild(section);
@@ -143,9 +143,9 @@
         buildComments();
         // New placeholders within the same pageview -> activate by id.
         ezstandalone.cmd.push(function () {
-            ezstandalone.showAds(151, 152);
+            ezstandalone.showAds(918, 919);
         });
-        status("showAds(151, 152) — comments loaded, placements activated");
+        status("showAds(918, 919) — comments loaded, placements activated");
         loadBtn.disabled = true;
         hideBtn.disabled = false;
     }
@@ -156,9 +156,9 @@
         // executes before the removeChild below. (Before init nothing has been
         // shown yet, so the queued destroy is a harmless no-op.)
         ezstandalone.cmd.push(function () {
-            ezstandalone.destroyPlaceholders(151, 152);
+            ezstandalone.destroyPlaceholders(918, 919);
         });
-        status("destroyPlaceholders(151, 152) — called before removing the DOM");
+        status("destroyPlaceholders(918, 919) — called before removing the DOM");
         var section = document.getElementById("comments");
         if (section) {
             section.parentNode.removeChild(section);
@@ -170,7 +170,7 @@
     loadBtn.addEventListener("click", showComments);
     hideBtn.addEventListener("click", hideComments);
     hideBtn.disabled = true;
-    status("ready — click \"Load comments\" to append placements 151 and 152");
+    status("ready — click \"Load comments\" to append placements 918 and 919");
 })();
 </script>
 <script src="/assets/site.js"></script>
