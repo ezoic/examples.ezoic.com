@@ -44,10 +44,11 @@
     <div class="explainer-body">The hook exposes <code>request</code>, <code>show</code>,
     <code>requestAndShow</code>, <code>requestWithOverlay</code>, and <code>contentLocker</code>, each
     resolving with a typed outcome object (<code>status</code>, <code>reward</code>, <code>msg</code>).
-    It requires a <code>loaderUrl</code> pointing at the publisher's site-specific rewarded-ads loader
-    script — the demo below leaves this blank by default (no publisher loader exists for
-    <code>examples.ezoic.com</code>), so requests correctly stay pending until a real loader URL is
-    supplied in the input field.</div>
+    On an Ezoic JS-integrated page <strong>no loader URL is required</strong>: the default mode calls
+    <code>ezstandalone.initRewardedAds(placements?)</code> and the Ezoic runtime serves the
+    host-correct <code>/porpoiseant/ezadloadrewarded.js</code> loader itself. Pass
+    <code>useEzoicRewarded({ loaderUrl })</code> only as an escape hatch for pages that are
+    <strong>not</strong> Ezoic JS-integrated.</div>
   </div>
 
   <p class="source-row"><a class="source-link" href="https://github.com/ezoic/examples.ezoic.com/blob/master/site/react-sdk/rewarded.html">View source on GitHub &rarr;</a></p>
@@ -57,13 +58,15 @@
   <pre class="snippet"><code>import { useEzoicRewarded } from '@ezoic/react-sdk';
 
 function RewardButton() {
+  // No loaderUrl on an Ezoic JS-integrated page — the runtime serves the loader.
+  // Optionally scope the site-wide placements the runtime enables.
   const { requestAndShow } = useEzoicRewarded({
-    loaderUrl: 'https://example.com/porpoiseant/ezadloadrewarded.js',
+    placements: { anchor: false, interstitial: false, video: true, sideRails: false },
   });
 
   async function onClick() {
-    const result = await requestAndShow({ placementId: 'unlock-article' });
-    if (result.status === 'granted') {
+    const { reward } = await requestAndShow();
+    if (reward) {
       // unlock the reward
     }
   }
@@ -74,8 +77,9 @@ function RewardButton() {
   <div class="explainer">
     <h2>Live demo</h2>
     <div class="explainer-body">The panel below embeds the SDK's own demo app (built from
-    <code>@ezoic/react-sdk</code> v1.0.0) — use its <strong>"Rewarded ads"</strong> panel; provide your
-    own loader URL to see a real request/show cycle, or leave it blank to see the pending state.
+    <code>@ezoic/react-sdk</code> v1.0.0) — use its <strong>"Rewarded ads"</strong> panel. No loader
+    URL is needed; the demo runs the default (runtime-served) mode, and the Ezoic runtime serves the
+    rewarded loader on an integrated page.
     <a href="/react-sdk/demo.html">Open the full demo in a new tab &rarr;</a></div>
   </div>
   <div class="frame-holder">

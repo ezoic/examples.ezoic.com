@@ -39,14 +39,18 @@
 
   <div class="explainer">
     <h2>What this demonstrates</h2>
-    <div class="explainer-body">Rewarded ads use a separate, publisher-specific loader script, so
-    you enable them by passing its URL to <code>EzoicPlugin</code> (the <code>rewardedLoaderUrl</code>
-    option) — find the exact host in your Ezoic dashboard. Every callback-style method
-    (<code>request</code>, <code>show</code>, <code>requestAndShow</code>,
-    <code>requestWithOverlay</code>, <code>contentLocker</code>) returns a Promise that settles for
-    every outcome, including no-fill and cancellation, and a reactive <code>status</code> tracks the
-    lifecycle (<code>idle</code> → <code>initiated</code> → <code>displayed</code> →
-    <code>closed</code>).</div>
+    <div class="explainer-body">On an Ezoic JS-integrated page — one the SDK bootstraps with
+    <code>EzoicPlugin</code> — rewarded ads need <strong>no loader URL</strong>.
+    <code>useEzoicRewarded()</code> calls <code>ezstandalone.initRewardedAds(...)</code> on mount and
+    the Ezoic runtime serves the host-correct rewarded loader itself. An optional
+    <code>placements</code> option scopes which site-wide formats (anchor, interstitial, video, side
+    rails) are enabled. A loader URL (<code>useEzoicRewarded({ loaderUrl })</code> or the plugin's
+    <code>rewardedLoaderUrl</code>) remains only as an escape hatch for pages not JS-integrated
+    through this SDK. Every callback-style method (<code>request</code>, <code>show</code>,
+    <code>requestAndShow</code>, <code>requestWithOverlay</code>, <code>contentLocker</code>) returns
+    a Promise that settles for every outcome, including no-fill and cancellation, and a reactive
+    <code>status</code> tracks the lifecycle (<code>idle</code> → <code>initiated</code> →
+    <code>displayed</code> → <code>closed</code>).</div>
   </div>
 
   <p class="source-row"><a class="source-link" href="https://github.com/ezoic/examples.ezoic.com/blob/master/site/vue-sdk/rewarded.html">View source on GitHub &rarr;</a></p>
@@ -74,11 +78,12 @@ async function unlock() {
   <div class="explainer">
     <h2>Live demo</h2>
     <div class="explainer-body">The panel below embeds the SDK's own demo app (built from
-    <code>@ezoic/vue-sdk</code> v1.0.0) — use its <strong>"Rewarded ads"</strong> panel. This demo
-    ships no <code>rewardedLoaderUrl</code>, so nothing drains the rewarded command queue:
-    <code>ready</code> stays <code>false</code> and the request/content-locker promises stay
-    pending by design — that is the expected outcome here, not a bug. A publisher wires up their
-    own loader URL from their Ezoic dashboard to exercise the full flow.
+    <code>@ezoic/vue-sdk</code> v1.0.0) — use its <strong>"Rewarded ads"</strong> panel. It runs in
+    default (runtime-served) mode with no loader URL: <code>useEzoicRewarded()</code> calls
+    <code>initRewardedAds(...)</code> and, on a page with live Ezoic demand, the runtime serves the
+    rewarded loader and flips <code>ready</code> to <code>true</code>. On
+    <code>examples.ezoic.com</code> (no live demand) the request may stay pending — that is the
+    expected outcome here, not a bug.
     <a href="/vue-sdk/demo.html">Open the full demo in a new tab &rarr;</a></div>
   </div>
   <div class="frame-holder">
