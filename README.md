@@ -60,8 +60,9 @@ Internal links between pages are extensionless (for example `/idless/basic` and
    contain the literal token `showAds(` in code or comments — the id-less resolver scans
    inline scripts for that token to place ads, so use
    `window.ezstandalone["show" + "Ads"](...)` instead. This does not apply to
-   placement-id pages (`site/placeholders/`): `showAds(147)` with numeric ids places into
-   the matching `ezoic-pub-ad-placeholder-147` div, not at the script position.
+   placement-id pages (`site/placeholders/`): `showAds({ id: 910, required: true, sizes })` with
+   numeric ids places into the matching `ezoic-pub-ad-placeholder-910` div, not at the script
+   position.
 
 ## Local preview
 
