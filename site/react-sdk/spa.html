@@ -55,11 +55,11 @@
   <pre class="snippet"><code>import { useEzoicPageView, EzoicAd } from '@ezoic/react-sdk';
 
 function Page({ route }) {
-  useEzoicPageView(route, { ids: [201, 202] });
+  useEzoicPageView(route, { ids: [111, 112] });
   return (
     &lt;&gt;
-      &lt;EzoicAd id={201} sizes={['728x90']} required /&gt;
-      &lt;EzoicAd id={202} sizes={['300x250']} required /&gt;
+      &lt;EzoicAd id={111} sizes={['728x90']} required /&gt;
+      &lt;EzoicAd id={112} sizes={['300x250']} required /&gt;
     &lt;/&gt;
   );
 }</code></pre>
