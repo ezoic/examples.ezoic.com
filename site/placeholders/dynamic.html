@@ -35,12 +35,14 @@
   <div class="explainer">
     <h2>What this demonstrates</h2>
     <div class="explainer-body">Placements that come and go within a single pageview. When new
-    placeholder divs are added to the page, <code>ezstandalone.showAds(ids)</code> activates them.
+    placeholder divs are added to the page,
+    <code>ezstandalone.showAds({ id, required: true, sizes })</code> activates them — these are
+    Generated placement ids with no preset dashboard sizing, so each object passes its own sizes.
     When that content is removed, <code>ezstandalone.destroyPlaceholders(ids)</code> must run
     <strong>before</strong> the divs leave the DOM so the slots are torn down cleanly. When the same
-    content becomes visible again, <code>showAds(ids)</code> re-activates it. The buttons below add a
-    comments section carrying placements 918 and 919, tear it down, and re-add it; the status bar
-    logs each call.</div>
+    content becomes visible again, <code>showAds({ id, required: true, sizes })</code> re-activates
+    it. The buttons below add a comments section carrying placements 918 and 919, tear it down, and
+    re-add it; the status bar logs each call.</div>
   </div>
 
   <div class="snippet-label">Integration used on this page</div>
@@ -56,7 +58,7 @@
 &lt;!-- After appending the divs: show the new placements --&gt;
 &lt;script&gt;
   ezstandalone.cmd.push(function () {
-    ezstandalone.showAds(918, 919);
+    ezstandalone.showAds({ id: 918, required: true, sizes: ['300x250'] }, { id: 919, required: true, sizes: ['300x250'] });
   });
 &lt;/script&gt;
 
@@ -70,7 +72,7 @@
 &lt;!-- Re-show after re-appending the divs --&gt;
 &lt;script&gt;
   ezstandalone.cmd.push(function () {
-    ezstandalone.showAds(918, 919);
+    ezstandalone.showAds({ id: 918, required: true, sizes: ['300x250'] }, { id: 919, required: true, sizes: ['300x250'] });
   });
 &lt;/script&gt;</code></pre>
 
@@ -141,11 +143,16 @@
 
     function showComments() {
         buildComments();
-        // New placeholders within the same pageview -> activate by id.
+        // New placeholders within the same pageview -> activate by id. These are
+        // Generated ids with no preset dashboard sizing, so each object passes
+        // its own sizes and required: true.
         ezstandalone.cmd.push(function () {
-            ezstandalone.showAds(918, 919);
+            ezstandalone.showAds(
+                { id: 918, required: true, sizes: ['300x250'] },
+                { id: 919, required: true, sizes: ['300x250'] }
+            );
         });
-        status("showAds(918, 919) — comments loaded, placements activated");
+        status("showAds({ id: 918, ... }, { id: 919, ... }) — comments loaded, placements activated");
         loadBtn.disabled = true;
         hideBtn.disabled = false;
     }

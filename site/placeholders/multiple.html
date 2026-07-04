@@ -36,10 +36,13 @@
     <h2>What this demonstrates</h2>
     <div class="explainer-body">Three publisher-owned placeholder divs at different positions in one
     article — 915 near the top, 916 mid-article, 917 at the bottom — activated by a single batched
-    <code>ezstandalone.showAds(915, 916, 917)</code> call after the last div. The docs recommend
-    passing every placement id on a page into one <code>showAds()</code> call so the auction runs in
-    one server request instead of several. Calling <code>showAds()</code> with no arguments activates
-    every placeholder div present on the page instead of a named subset.</div>
+    <code>ezstandalone.showAds({ id: 915, required: true, sizes: [...] }, { id: 916, required: true,
+    sizes: [...] }, { id: 917, required: true, sizes: [...] })</code> call after the last div. These
+    are Generated placement ids with no preset dashboard sizing, so each object passes its own
+    <code>sizes</code> and <code>required: true</code>. The docs recommend passing every placement
+    into one <code>showAds()</code> call so the auction runs in one server request instead of
+    several. Calling <code>showAds()</code> with no arguments activates every placeholder div present
+    on the page instead of a named subset.</div>
   </div>
 
   <div class="snippet-label">Integration used on this page</div>
@@ -60,7 +63,11 @@
 &lt;!-- One batched activation after the last div --&gt;
 &lt;script&gt;
   ezstandalone.cmd.push(function () {
-    ezstandalone.showAds(915, 916, 917);
+    ezstandalone.showAds(
+      { id: 915, required: true, sizes: ['300x250', '336x280'] },
+      { id: 916, required: true, sizes: ['300x250'] },
+      { id: 917, required: true, sizes: ['728x90', '300x250'] }
+    );
   });
 &lt;/script&gt;</code></pre>
 
@@ -97,7 +104,11 @@
 
     <script>
         ezstandalone.cmd.push(function () {
-            ezstandalone.showAds(915, 916, 917);
+            ezstandalone.showAds(
+                { id: 915, required: true, sizes: ['300x250', '336x280'] },
+                { id: 916, required: true, sizes: ['300x250'] },
+                { id: 917, required: true, sizes: ['728x90', '300x250'] }
+            );
         });
     </script>
   </article>

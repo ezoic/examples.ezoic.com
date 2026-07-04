@@ -31,8 +31,8 @@ site/
     infinite.html       Infinite scroll: id exhaustion and recycling
   placeholders/
     index.html          Index of the placement-id examples
-    basic.html          One dashboard placement div + showAds(id)
-    multiple.html       Three divs, one batched showAds(id, id, id) call
+    basic.html          One dashboard placement div + showAds({ id, required, sizes })
+    multiple.html       Three divs, one batched showAds({ id, required, sizes }, ...) call
     dynamic.html        Lazy-loaded content: showAds, destroyPlaceholders, re-show
     infinite.html       Infinite scroll with a unique id per batch (no reuse)
   game-sdk/

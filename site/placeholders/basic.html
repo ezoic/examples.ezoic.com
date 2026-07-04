@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Basic — one placement div activated by showAds(910) | Ezoic Examples</title>
-<meta name="description" content="The canonical placement-id setup: a publisher-owned placeholder div activated by ezstandalone.showAds(910).">
+<title>Basic — one placement div activated by object-form showAds | Ezoic Examples</title>
+<meta name="description" content="The canonical placement-id setup: a publisher-owned placeholder div activated by ezstandalone.showAds({ id: 910, required: true, sizes: [...] }).">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Reddit+Mono:wght@400;500&display=swap">
@@ -36,9 +36,12 @@
     <h2>What this demonstrates</h2>
     <div class="explainer-body">The canonical placement-id setup. The
     <code>&lt;div id="ezoic-pub-ad-placeholder-910"&gt;</code> is markup the page owns — the id comes
-    from a placement created in the Ezoic dashboard. <code>ezstandalone.showAds(910)</code> activates
-    it and the ad renders inside that div. The div carries no width, height, or margin: the docs warn
-    that styling a placeholder leaves empty space if the ad does not fill.</div>
+    from a placement created in the Ezoic dashboard. This example uses a Generated placement id, which
+    carries no preset dashboard sizing, so
+    <code>ezstandalone.showAds({ id: 910, required: true, sizes: ['300x250', '336x280'] })</code>
+    passes the sizes and <code>required: true</code> explicitly, activating it so the ad renders
+    inside that div. The div carries no width, height, or margin: the docs warn that styling a
+    placeholder leaves empty space if the ad does not fill.</div>
   </div>
 
   <div class="snippet-label">Integration used on this page</div>
@@ -55,7 +58,7 @@
 &lt;div id="ezoic-pub-ad-placeholder-910"&gt;&lt;/div&gt;
 &lt;script&gt;
   ezstandalone.cmd.push(function () {
-    ezstandalone.showAds(910);
+    ezstandalone.showAds({ id: 910, required: true, sizes: ['300x250', '336x280'] });
   });
 &lt;/script&gt;</code></pre>
 
@@ -69,12 +72,13 @@
     position is inferred — the div is exactly where the ad renders.</p>
     <p>The paragraph above is the first content block and this is the second. Directly below sits the
     placeholder div and the activation call. The div is empty markup on its own; it fills only after
-    <code>showAds(910)</code> runs and the auction returns an ad.</p>
+    <code>showAds({ id: 910, required: true, sizes: [...] })</code> runs and the auction returns an
+    ad.</p>
 
     <div id="ezoic-pub-ad-placeholder-910"></div>
     <script>
         ezstandalone.cmd.push(function () {
-            ezstandalone.showAds(910);
+            ezstandalone.showAds({ id: 910, required: true, sizes: ['300x250', '336x280'] });
         });
     </script>
 
