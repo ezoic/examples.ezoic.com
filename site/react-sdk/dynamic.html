@@ -56,13 +56,13 @@
 import { EzoicAd } from '@ezoic/react-sdk';
 
 function Feed() {
-  const [items, setItems] = useState([104]);
+  const [items, setItems] = useState([119]);
   return (
     &lt;&gt;
       {items.map((id) =&gt; (
         &lt;EzoicAd key={id} id={id} sizes={['300x250']} required /&gt;
       ))}
-      &lt;button onClick={() =&gt; setItems((ids) =&gt; [...ids, 104 + ids.length])}&gt;
+      &lt;button onClick={() =&gt; setItems((ids) =&gt; [...ids, 119 + ids.length])}&gt;
         Load more
       &lt;/button&gt;
     &lt;/&gt;
