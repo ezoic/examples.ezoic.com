@@ -70,13 +70,11 @@ import { EzoicVideo, EzoicVideoEmbed } from '@ezoic/vue-sdk';
     <code>@ezoic/vue-sdk</code> v1.0.0) — look at its <strong>"Video"</strong> panel. The
     <code>EzoicVideoEmbed</code> example uses a real Ezoic Open Video id
     (<code>zn0TPhaPiju</code>); an Open Video embed renders nothing for a nonexistent id.
-    <code>examples.ezoic.com</code>'s root domain is not lite-active, so the <code>EzoicVideo</code>
-    ad-bundle placeholder will not fill (it also only requests once page-level ads load — the demo's
-    rewarded init triggers that). Check the placeholder div and the embed container, not the fill.
+    This article frame has no placeholders. The video unit runs in the iframe below and on the full demo page — scroll to Live demo or open it in a new tab. It still only requests once page-level ads load (the demo's rewarded init triggers that). Check the placeholder div and the embed container.
     <a href="/vue-sdk/demo.html">Open the full demo in a new tab &rarr;</a></div>
   </div>
   <div class="frame-holder">
-    <iframe class="vue-demo-frame" src="/vue-sdk/demo.html" title="@ezoic/vue-sdk live demo" loading="lazy"></iframe>
+    <iframe class="vue-demo-frame" src="/vue-sdk/demo.html" title="@ezoic/vue-sdk live demo"></iframe>
   </div>
 </main>
 
